@@ -7,9 +7,32 @@
     "light": "#bc07c9",
     "dark": "#3b023d"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/image.png",
   "navigation": {
     "tabs": [
+      {
+        "tab": "Welcome to Breeze",
+        "groups": [
+          {
+            "group": "Breeze",
+            "pages": [
+              "introduction/welcome"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Introduction",
+        "groups": [
+          {
+            "group": "Breeze",
+            "pages": [
+              "introduction/introduction",
+              "introduction/Breeze-Risk-Engine"
+            ]
+          }
+        ]
+      },
       {
         "tab": "Guides",
         "groups": [
@@ -53,23 +76,6 @@
             ]
           }
         ]
-      },
-      {
-        "tab": "Welcome to Breeze",
-        "groups": [
-          {
-            "group": "Breeze",
-            "pages": [
-              "introduction/welcome"
-            ]
-          },
-          {
-            "group": "Introduction",
-            "pages": [
-              "introduction/welcome"
-            ]
-          }
-        ]
       }
     ],
     "global": {
@@ -93,8 +99,8 @@
     }
   },
   "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "light": "/logo/logo-light.png",
+    "dark": "/logo/logo-dark.png"
   },
   "navbar": {
     "links": [
