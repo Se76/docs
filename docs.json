@@ -1,11 +1,11 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Mint Starter Kit",
+  "name": "Breeze",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#c12c96",
+    "light": "#bc07c9",
+    "dark": "#3b023d"
   },
   "favicon": "/favicon.svg",
   "navigation": {
@@ -14,7 +14,7 @@
         "tab": "Guides",
         "groups": [
           {
-            "group": "Get Started",
+            "group": "Breeze",
             "pages": [
               "index",
               "quickstart",
@@ -35,7 +35,7 @@
         ]
       },
       {
-        "tab": "API Reference",
+        "tab": "Breeze API",
         "groups": [
           {
             "group": "API Documentation",
@@ -50,6 +50,23 @@
               "api-reference/endpoint/create",
               "api-reference/endpoint/delete",
               "api-reference/endpoint/webhook"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Welcome to Breeze",
+        "groups": [
+          {
+            "group": "Breeze",
+            "pages": [
+              "introduction/welcome"
+            ]
+          },
+          {
+            "group": "Introduction",
+            "pages": [
+              "introduction/welcome"
             ]
           }
         ]
