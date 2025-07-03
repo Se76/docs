@@ -27,9 +27,18 @@
           {
             "group": "Breeze",
             "pages": [
-              "introduction/introduction",
-              "introduction/Breeze-Risk-Engine"
+              "introduction/introduction"
             ]
+          },
+          {
+            "group": "Breeze Risk Engine (BRE)",
+            "pages": [
+              "introduction/Breeze-Risk-Engine",
+              "introduction/Key Risk Metrics & Formulas",
+              "introduction/Dynamic Pool Rebalancing Mechanism",
+              "introduction/Why S-Five is the Best Way to Offer Customizable Yield with Risk Protection"
+            ]          
+
           }
         ]
       },
