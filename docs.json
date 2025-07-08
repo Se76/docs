@@ -27,7 +27,8 @@
           {
             "group": "Breeze",
             "pages": [
-              "introduction/introduction"
+              "introduction/introduction",
+              "introduction/integration-benefits"
             ]
           },
           {
@@ -96,24 +97,14 @@
         ]
       },
       {
-        "tab": "Breeze Admin API",
+        "tab": "Breeze Admin Portal",
         "groups": [
           {
-            "group": "Breeze Admin API",
+            "group": "Breeze Admin Portal",
             "pages": [
-              "breeze-admin-api/breeze-admin-api"
-            ]
-          },
-          {
-            "group": "Endpoint Examples",
-            "pages": [
-              "breeze-admin-api/endpoints/createUserFundTx",
-              "breeze-admin-api/endpoints/createUserFundIx",
-              "breeze-admin-api/endpoints/createFund",
-              "breeze-admin-api/endpoints/createNewApiUser",
-              "breeze-admin-api/endpoints/createNewApiAdmin",
-              "breeze-admin-api/endpoints/increaseCreditsLimit",
-              "breeze-admin-api/endpoints/recordAllFundStats"
+              "admin-portal/introduction",
+              "admin-portal/quickstart",
+              "admin-portal/functionality"
             ]
           }
         ]
