@@ -201,7 +201,7 @@
         },
         {
           "anchor": "Support",
-          "href": "https://t.me/breze.com",
+          "href": "https://t.me/breezedevs",
           "icon": "telegram"
         }
       ]
@@ -215,7 +215,7 @@
     "links": [
       {
         "label": "Support",
-        "href": "https://t.me.breeze.finance"
+        "href": "https://t.me/breezedevs"
       }
     ],
     "primary": {
@@ -228,7 +228,7 @@
     "socials": {
       "x": "https://x.com/usebreezebaby",
       "github": "https://github.com/anagrambuild/breeze-sdk",
-      "telegram": "https://t.me/breze.com"
+      "telegram": "https://t.me/breezedevs"
     }
   },
   "api": {
