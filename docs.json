@@ -126,39 +126,7 @@
           {
             "group": "Breeze UI Library Compact Documentation",
             "pages": [
-              "ui-library/introduction",
-              "ui-library/get-started"
-            ]
-          },
-          {
-            "group": "NextJS UI Components",
-            "pages": [
-              "ui-library/nextJS/instalation",
-              "ui-library/nextJS/depositSimple",
-              "ui-library/nextJS/toogleDeposit",
-              "ui-library/nextJS/depositButton",
-              "ui-library/nextJS/withdrawButton",
-              "ui-library/nextJS/depositWithAmount",
-              "ui-library/nextJS/deposit",
-              "ui-library/nextJS/withdraw"
-            ]
-          },
-          {
-            "group": "ReactJS UI Components",
-            "pages": [
-              "ui-library/ReactJS/instalation"
-            ]
-          },
-          {
-            "group": "React Native UI Components",
-            "pages": [
-              "ui-library/ReactNative/instalation"
-            ]
-          },
-          {
-            "group": "ViteJS UI Components",
-            "pages": [
-              "ui-library/ViteJS/instalation"
+              "ui-library/introduction"
             ]
           }
         ]
