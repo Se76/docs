@@ -93,16 +93,16 @@
           {
             "group": "Endpoint Examples",
             "pages": [
-              "breeze-api/endpoints/getFund",
-              "breeze-api/endpoints/getUser",
-              "breeze-api/endpoints/getUserFund",
-              "breeze-api/endpoints/getFundForBaseAsset",
-              "breeze-api/endpoints/getUserCurrentValue",
-              "breeze-api/endpoints/getUserStats",
-              "breeze-api/endpoints/get_deposit_ixs",
-              "breeze-api/endpoints/GetDepositTransaction",
-              "breeze-api/endpoints/getWithdrawInstruction",
-              "breeze-api/endpoints/getWithdrawTransaction"
+              "breeze-api/endpoints/get-fund",
+              "breeze-api/endpoints/get-user",
+              "breeze-api/endpoints/get-fund-for-base-asset",
+              "breeze-api/endpoints/get-user-current-value",
+              "breeze-api/endpoints/get-user-stats",
+              "breeze-api/endpoints/get-partner-fund-stats",
+              "breeze-api/endpoints/get-deposit-instructions",
+              "breeze-api/endpoints/get-deposit-transaction",
+              "breeze-api/endpoints/get-withdraw-instruction",
+              "breeze-api/endpoints/get-withdraw-transaction"
             ]
           }
         ]
