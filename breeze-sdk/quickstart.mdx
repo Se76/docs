@@ -10,13 +10,13 @@ A comprehensive TypeScript SDK for interacting with the Breeze API, providing a 
 ## Installation
 
 ```bash
-npm install sdk-breeeze
+npm install sdk-brreeezze
 ```
 
 ## Quick Start
 
 ```typescript
-import { BreezeSDK } from 'sdk-breeeze';
+import { BreezeSDK } from 'sdk-brreeezze';
 
 // Initialize the SDK
 const sdk = new BreezeSDK({
@@ -59,100 +59,139 @@ const fund = await sdk.getFund('DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW');
 // Returns fund data with fund_index, lut_address, allocations, etc.
 ```
 
+**`getFundsForBaseAsset(baseAsset: string)`**
+Get all funds that support a specific base asset.
+
+```typescript
+const funds = await sdk.getFundsForBaseAsset('USDC');
+// Returns array of funds supporting USDC
+```
+
 ##### User Operations
 
 **`getUserInfo(userId: string)`**
 Get user information and fund association.
 
 ```typescript
-const userInfo = await sdk.getUserInfo('user_123');
+const userInfo = await sdk.getUserInfo('4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh');
+// Returns user fund associations and shares
 ```
 
-**`getUserFunds(userId: string)`**
-Get all funds associated with a user.
+**`getUserValue(userId: string, options?)`**
+Get the current value of user's fund holdings with optional query parameters.
 
 ```typescript
-const userFunds = await sdk.getUserFunds('user_123');
+// Basic usage
+const userValue = await sdk.getUserValue('4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh');
+
+// With query parameters
+const userValue = await sdk.getUserValue('4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh', {
+  fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW',
+  baseAsset: 'USDC',
+  fiatValue: 'USD'
+});
+// Returns: { success: true, result: { "USDC": [{ fund_id, base_asset_value, percent_of_fund, total_fund_value }] } }
 ```
 
-**`getUserValue(userId: string)`**
-Get the current value of user's fund holdings.
+**`getUserStats(userId: string, start: string, end: string, options?)`**
+Get user statistics for a specified date range with optional query parameters.
 
 ```typescript
-const userValue = await sdk.getUserValue('user_123');
-```
-
-**`getUserStats(userId: string, startDate: string, endDate: string)`**
-Get user statistics for a specified date range.
-
-```typescript
+// Basic usage
 const stats = await sdk.getUserStats(
-  'user_123',
+  '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh',
   '2025-01-01T00:00:00.000Z',
   '2025-01-31T23:59:59.999Z'
 );
+
+// With query parameters
+const stats = await sdk.getUserStats(
+  '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh',
+  '2025-01-01T00:00:00.000Z',
+  '2025-01-31T23:59:59.999Z',
+  {
+    fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW',
+    baseAsset: 'USDC',
+    fiatValue: 'USD'
+  }
+);
+// Returns time series data with yield percentages and values
+```
+
+##### Partner Operations
+
+**`getPartnerFundStats(organizationId: string, start: string, end: string, options?)`**
+Get partner fund statistics for a specified date range.
+
+```typescript
+const partnerStats = await sdk.getPartnerFundStats(
+  'org_2z9UJxhyNmCvOpHScFKyBZrqEdy',
+  '2025-01-01T00:00:00.000Z',
+  '2025-01-31T23:59:59.999Z',
+  {
+    baseAsset: 'USDC',
+    fiatValue: 'USD'
+  }
+);
+// Returns fund performance data with time series and metadata
 ```
 
 ##### Transaction Operations
 
 **`createDepositTransaction(options)`**
-Create a deposit transaction with flexible parameters.
+Create a deposit transaction. **Required parameters**: `fundId`, `amount`, `userKey`.
 
 ```typescript
 const depositTx = await sdk.createDepositTransaction({
-  fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW',
-  amount: 100,
-  userKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh',
+  fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW', // Required
+  amount: 100, // Required
+  userKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh', // Required
   payerKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh', // Optional
   all: false // Optional: whether to deposit all available funds
 });
+// Returns base64 encoded transaction ready for signing
 ```
 
 **`createWithdrawTransaction(options)`**
-Create a withdraw transaction with flexible parameters.
+Create a withdraw transaction. **Required parameters**: `fundId`, `shares`, `userKey`.
 
 ```typescript
 const withdrawTx = await sdk.createWithdrawTransaction({
-  fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW',
-  shares: 50, // Note: uses 'shares' not 'amount'
-  userKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh',
+  fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW', // Required
+  shares: 50, // Required - uses 'shares' not 'amount'
+  userKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh', // Required
   payerKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh', // Optional
   all: false // Optional: whether to withdraw all shares
 });
+// Returns base64 encoded transaction ready for signing
 ```
 
 **`getDepositInstructions(options)`**
-Get Solana transaction instructions for deposits (for advanced users).
+Get Solana transaction instructions for deposits. **Required parameters**: `fundId`, `amount`, `userKey`. Returns an array of instructions.
 
 ```typescript
 const depositIx = await sdk.getDepositInstructions({
-  fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW',
-  amount: 100,
-  userKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh'
+  fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW', // Required
+  amount: 100, // Required
+  userKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh', // Required
+  payerKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh', // Optional
+  all: false // Optional
 });
-// Returns detailed Solana instruction data
+// Returns: { success: true, result: { deposit_instruction: [{ program_id, accounts, data }] } }
 ```
 
-**`getWithdrawInstructions(options)`**
-Get Solana transaction instructions for withdrawals (for advanced users).
+**`getWithdrawInstruction(options)`**
+Get Solana transaction instruction for withdrawals. **Required parameters**: `fundId`, `shares`, `userKey`. Returns a single instruction with lookup table address.
 
 ```typescript
-const withdrawIx = await sdk.getWithdrawInstructions({
-  fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW',
-  shares: 50,
-  userKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh'
+const withdrawIx = await sdk.getWithdrawInstruction({
+  fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW', // Required
+  shares: 50, // Required
+  userKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh', // Required
+  payerKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh', // Optional
+  all: false // Optional
 });
-// Returns detailed Solana instruction data with lookup table address
-```
-
-**`createUserFundTransaction(fundId: string, userKey: string)`**
-Create a transaction to associate a user with a fund.
-
-```typescript
-const userFundTx = await sdk.createUserFundTransaction(
-  'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW',
-  '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh'
-);
+// Returns: { success: true, result: { lut_address: "...", withdraw_instruction: { program_id, accounts, data } } }
 ```
 
 ##### Utility Methods
@@ -174,7 +213,7 @@ const apiClient = sdk.getApiClient();
 ## Complete Example
 
 ```typescript
-import { BreezeSDK } from 'sdk-breeeze';
+import { BreezeSDK } from 'sdk-brreeezze';
 
 async function example() {
   const sdk = new BreezeSDK({
@@ -186,7 +225,6 @@ async function example() {
     // 1. Get fund information
     const fund = await sdk.getFund('DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW');
     console.log('Fund:', fund.result.fund_id, fund.result.base_asset);
-
 
     // 2. Create deposit transaction
     const deposit = await sdk.createDepositTransaction({
@@ -202,12 +240,40 @@ async function example() {
       amount: 100,
       userKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh'
     });
-    console.log('Instruction accounts:', instructions.result.deposit_instruction.accounts.length);
+    console.log('Instruction count:', instructions.result.deposit_instruction.length);
 
   } catch (error) {
     console.error('Error:', error.message);
   }
 }
+```
+
+## Transaction Signing and Execution
+
+For executing transactions on Solana, you'll need to sign and send them:
+
+```typescript
+import { Connection, Keypair, VersionedTransaction } from '@solana/web3.js';
+import bs58 from 'bs58';
+
+// Create connection and keypair
+const connection = new Connection('https://api.mainnet-beta.solana.com');
+const userKeypair = Keypair.fromSecretKey(bs58.decode('your-private-key'));
+
+// Create transaction
+const depositTx = await sdk.createDepositTransaction({
+  fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW',
+  amount: 100,
+  userKey: userKeypair.publicKey.toString()
+});
+
+// Sign and send transaction
+const txBuffer = Buffer.from(depositTx.result, 'base64');
+const transaction = VersionedTransaction.deserialize(txBuffer);
+transaction.sign([userKeypair]);
+
+const signature = await connection.sendTransaction(transaction);
+console.log('Transaction signature:', signature);
 ```
 
 ## Low-Level API
@@ -218,9 +284,9 @@ For advanced use cases, you can use the individual functions and ApiClient direc
 import { 
   ApiClient, 
   getFund, 
-  createUserFund,
-  getInstructionsForDeposit 
-} from 'sdk-breeeze';
+  getInstructionsForDeposit,
+  getTransactionForDeposit
+} from 'sdk-brreeezze';
 
 const apiClient = new ApiClient('http://localhost:8080/');
 const fundData = await getFund(apiClient, 'fund_123', 'api_key');
@@ -231,7 +297,7 @@ const fundData = await getFund(apiClient, 'fund_123', 'api_key');
 The SDK uses custom error types for better error handling:
 
 ```typescript
-import { BreezeApiError } from 'sdk-breeeze';
+import { BreezeApiError } from 'sdk-brreeezze';
 
 try {
   const fund = await sdk.getFund('invalid_fund_id');
@@ -253,6 +319,17 @@ try {
   - `code?: string` - Error code ('TIMEOUT', 'NETWORK_ERROR', etc.)
   - `response?: any` - Full error response from the API
 
+### Server Response Handling
+
+The SDK handles server response variations including typos:
+
+```typescript
+// The SDK automatically handles both "success" and "sucess" (server typo)
+if (response.success || response.sucess) {
+  // Handle successful response
+}
+```
+
 ## TypeScript Support
 
 The SDK is written in TypeScript and provides full type definitions:
@@ -263,13 +340,15 @@ import {
   UserInfo, 
   TransactionForDeposit,
   InstructionsForDeposit,
-  CreateUserFundResponse 
-} from 'sdk-breeeze';
+  UserValueInfo,
+  PartnerFundStatsInfo
+} from 'sdk-brreeezze';
 
 // All API responses are properly typed
 const fund: FundData = await sdk.getFund('fund_123');
 const instructions: InstructionsForDeposit = await sdk.getDepositInstructions({
   fundId: 'fund_123',
+  amount: 100,
   userKey: 'user_key'
 });
 ```
@@ -279,26 +358,23 @@ const instructions: InstructionsForDeposit = await sdk.getDepositInstructions({
 ### Integration Tests
 Run integration tests against your real API server:
 
-1. First, ensure your Rust API server is running on `localhost:8080`
-2. Update the test configuration in all tests with valid IDs
-3. Run the tests:
-
-### Quick Testing
-Test individual endpoints:
 ```bash
-cd packages/sdk
-
-# Test deposit actions  
-node test_deposit_actions.js
-
-# Test withdraw actions  
-node test_withdraw_actions.js
-
-# Test GET endpoints
-node test_other_get_reqs.js
+npm run test:integration
 ```
 
+### Example Scripts
+Test the SDK with example scripts:
 
+```bash
+# Basic usage example
+npm run example:basic
+
+# Full integration flow with transaction execution
+npm run example:integration
+
+# Simple API demonstration (no transaction execution)
+npx tsx examples/integration-flow-simple.ts
+```
 
 ## API Endpoints
 
@@ -307,15 +383,16 @@ The SDK interacts with these API endpoints:
 ### GET Endpoints
 - `GET /getfund/{fund_id}` - Get fund information
 - `GET /user/{user_id}` - Get user information  
-- `GET /userfunds/{user_id}` - Get user funds
-- `GET /uservalue/{user_id}` - Get user value
-- `GET /userstats/{user_id}?start=...&end=...` - Get user statistics
+- `GET /uservalue/{user_id}` - Get user value (supports query params)
+- `GET /userstats/{user_id}?start=...&end=...` - Get user statistics (supports query params)
+- `GET /fund/{base_asset}` - Get funds for base asset
+- `GET /partner/{organization_id}/stats?start=...&end=...` - Get partner fund statistics
 
 ### POST Endpoints  
-- `POST /deposit/tx` - Create deposit transaction
-- `POST /withdraw/tx` - Create withdraw transaction
-- `POST /deposit/ix` - Get deposit instructions
-- `POST /withdraw/ix` - Get withdraw instructions
+- `POST /deposit/tx` - Create deposit transaction (requires fundId, amount, userKey)
+- `POST /withdraw/tx` - Create withdraw transaction (requires fundId, shares, userKey)
+- `POST /deposit/ix` - Get deposit instructions (requires fundId, amount, userKey, returns array)
+- `POST /withdraw/ix` - Get withdraw instruction (requires fundId, shares, userKey, returns single instruction)
 
 ## Development
 
@@ -324,6 +401,14 @@ The SDK interacts with these API endpoints:
 ```bash
 npm run build
 ```
+
+### Example Usage
+
+The SDK includes comprehensive examples in the `examples/` directory:
+
+1. **`basic-usage.ts`** - Simple SDK initialization and basic method calls
+2. **`integration-flow.ts`** - Complete transaction flow with Solana execution
+3. **`integration-flow-simple.ts`** - API demonstration without transaction execution
 
 ### Project Structure
 
@@ -334,12 +419,12 @@ src/
 ├── index.ts                   # Main exports
 ├── getFund/                   # Fund-related operations
 ├── getUserInfo/               # User info operations
-├── getUserFund/               # User fund operations
 ├── getUserStats/              # User statistics
 ├── getUserValue/              # User value operations  
+├── getFundsForBaseAsset/      # Base asset fund operations
+├── getPartnerFundStats/       # Partner statistics
 ├── transactionForDeposit/     # Deposit transactions
 ├── transactionForWithdraw/    # Withdraw transactions
 ├── instructionsForDeposit/    # Deposit instructions
-├── instructionsForWithdraw/   # Withdraw instructions
-└── createUserFund/            # User fund creation
+└── instructionsForWithdraw/   # Withdraw instructions
 ```
