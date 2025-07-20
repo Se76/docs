@@ -26,9 +26,8 @@ description: 'Explination of possible Breeze Integration using Breeze Admin API 
   <Step title="Monitor Portfolio">
     <Card title="Track Performance & Analytics" icon="chart-line">
       Regularly update user portfolio data:
-      - `GET /user/{user_id}/current_value` for real-time portfolio values
-      - `GET /user/{user_id}/stats` for historical performance analytics
-      - `GET /getfund/{fund_id}` for fund-level risk metrics and allocations
+      - `GET /user-balances/{user_id}` for real-time portfolio values
+      - `GET /user-yield/{user_id}` for earned yield values
       - Display yield earned, current risk exposure, and portfolio growth
     </Card>
   </Step>
