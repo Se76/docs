@@ -16,7 +16,7 @@ npm install breeze-sdk
 ## Quick Start
 
 ```typescript
-import { BreezeSDK } from 'sdk-brreeezze';
+import { BreezeSDK } from 'breeze-sdk';
 
 // Initialize the SDK
 const sdk = new BreezeSDK({
@@ -213,7 +213,7 @@ const apiClient = sdk.getApiClient();
 ## Complete Example
 
 ```typescript
-import { BreezeSDK } from 'sdk-brreeezze';
+import { BreezeSDK } from 'breeze-sdk';
 
 async function example() {
   const sdk = new BreezeSDK({
@@ -302,7 +302,7 @@ import {
   getUserBalances,
   getInstructionsForDeposit,
   getTransactionForDeposit
-} from 'sdk-brreeezze';
+} from 'breeze-sdk';
 
 const apiClient = new ApiClient('http://localhost:8080/');
 const userYield = await getUserYield(apiClient, 'api_key', 'user_id');
@@ -314,7 +314,7 @@ const userBalances = await getUserBalances(apiClient, 'api_key', 'user_id');
 The SDK uses custom error types for better error handling:
 
 ```typescript
-import { BreezeApiError } from 'sdk-brreeezze';
+import { BreezeApiError } from 'breeze-sdk';
 
 try {
   const fund = await sdk.getFund('invalid_fund_id');
@@ -357,7 +357,7 @@ import {
   UserBalances, 
   TransactionForDeposit,
   InstructionsForDeposit
-} from 'sdk-brreeezze';
+} from 'breeze-sdk';
 
 // All API responses are properly typed
 const userYield: UserYield = await sdk.getUserYield({
