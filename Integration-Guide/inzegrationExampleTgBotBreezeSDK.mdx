@@ -294,7 +294,7 @@ private async processWithdraw(chatId: number, percentage?: number, customAmount?
     if (percentage === 100) {
         humanAmount = breezeBalance;
         isAll = true;
-        // For 100% withdrawals, we pass 0 as shares and set all=true
+        // For 100% withdrawals, we pass 0 as amount and set all=true
         sharesAmount = 0;
     } else if (percentage === 50) {
         humanAmount = breezeBalance * 0.5;
