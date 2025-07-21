@@ -289,19 +289,19 @@ private async processWithdraw(chatId: number, percentage?: number, customAmount?
 
     let humanAmount: number;
     let isAll = false;
-    let sharesAmount: number;
+    let amountAmount: number;
 
     if (percentage === 100) {
         humanAmount = breezeBalance;
         isAll = true;
         // For 100% withdrawals, we pass 0 as amount and set all=true
-        sharesAmount = 0;
+        amountAmount = 0;
     } else if (percentage === 50) {
         humanAmount = breezeBalance * 0.5;
-        sharesAmount = Number(this.convertToTokenAmount(humanAmount, 'USDC'));
+        amountAmount = Number(this.convertToTokenAmount(humanAmount, 'USDC'));
     } else if (customAmount) {
         humanAmount = customAmount;
-        sharesAmount = Number(this.convertToTokenAmount(customAmount, 'USDC'));
+        amountAmount = Number(this.convertToTokenAmount(customAmount, 'USDC'));
     }
 
     if (humanAmount <= 0) {
@@ -313,7 +313,7 @@ private async processWithdraw(chatId: number, percentage?: number, customAmount?
         // Call Breeze SDK for withdraw
         const data = await this.breezeSDK.createWithdrawTransaction({
             fundId: BREEZE_FUND_ID,
-            shares: sharesAmount,
+            amount: amountAmount,
             all: isAll,
             userKey: userData.publicKey!,
             payerKey: undefined

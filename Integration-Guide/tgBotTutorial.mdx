@@ -248,7 +248,7 @@ export class BreezeAPIClient {
         const response = await this.httpClient.post('/withdraw/tx', {
             params: {
                 fund_id: params.fundId,
-                shares: params.shares,
+                amount: params.amount,
                 all: params.all || false,
                 user_key: params.userKey,
                 payer_key: params.payerKey || null
