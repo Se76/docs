@@ -63,8 +63,7 @@
             "group": "Integration Tutorials",
             "pages": [
               "Integration-Guide/breezePoweredWebsite",
-              "Integration-Guide/tgBotTutorial",
-              "Integration-Guide/twitterTutorial"
+              "Integration-Guide/tgBotTutorial"
             ]
           }
         ]
