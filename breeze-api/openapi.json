@@ -14,7 +14,7 @@
   },
   "servers": [
     {
-      "url": "https://api.breeze.com",
+      "url": "https://api.breeze.baby",
       "description": "Production server"
     }
   ],
