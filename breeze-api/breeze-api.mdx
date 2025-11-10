@@ -22,14 +22,15 @@ optimization features.
 - **`GET /fund/{base_asset}`** - Get all funds that use a specific base asset (e.g., USDC, USDT). */}
 
 ## Portfolio Analytics
-- **`GET /user-yield/{user_id}`** - Get real-time portfolio value with optional currency conversion and filtering by fund or base asset.
+- **`GET /user-yield/{user_id}`** - Get real-time portfolio value with optional currency conversion and filtering by balance or base asset.
 - **`GET /user-balances/{user_id}`** - Retrieve data about the earned yield by the user.
+- **`GET /breeze-balances/{user_id}`** - Get detailed balance information including strategy details, position values, deposits, yield earned, and APY.
 
 ## Transaction Generation
-- **`POST /deposit/ix`** - Generate Solana instructions for depositing funds into a Breeze fund.
-- **`POST /deposit/tx`** - Generate a complete, versioned serialized unsigned for depositing funds.
-- **`POST /withdraw/ix`** - Generate Solana instructions for withdrawing from a organization fund.
-- **`POST /withdraw/tx`** - Generate a complete, versioned serialized unsigned for withdrawing funds.
+- **`POST /deposit/ix`** - Generate Solana instructions for depositing funds into a strategy.
+- **`POST /deposit/tx`** - Generate a complete, versioned serialized unsigned transaction for depositing funds.
+- **`POST /withdraw/ix`** - Generate Solana instructions for withdrawing from a strategy.
+- **`POST /withdraw/tx`** - Generate a complete, versioned serialized unsigned transaction for withdrawing funds.
 
 <Tip>
 **Best Practice**: Always check current portfolio value before making transactions to ensure accurate calculations and optimal timing.

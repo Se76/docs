@@ -93,6 +93,7 @@
             "group": "Endpoint Examples",
             "pages": [
               "breeze-api/endpoints/get-user-balances",
+              "breeze-api/endpoints/get-breeze-balances",
               "breeze-api/endpoints/get-user-yield",
               "breeze-api/endpoints/get-deposit-instructions",
               "breeze-api/endpoints/get-deposit-transaction",
@@ -110,6 +111,7 @@
             "pages": [
               "customer-portal/introduction",
               "customer-portal/quickstart",
+              "customer-portal/create-strategy",
               "customer-portal/functionality"
             ]
           }
