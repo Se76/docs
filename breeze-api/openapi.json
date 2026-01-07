@@ -5,7 +5,7 @@
     "description": "A comprehensive API for managing yield farming operations, funds, and user authentication",
     "contact": {
       "name": "Breeze Team",
-      "email": "support@breeze.com"
+      "email": "support@breeze.baby"
     },
     "license": {
       "name": ""
@@ -14,7 +14,7 @@
   },
   "servers": [
     {
-      "url": "https://api.breeze.com",
+      "url": "https://api.breeze.baby",
       "description": "Production server"
     }
   ],
@@ -253,9 +253,7 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": {
-
-                  }
+                  "items": {}
                 }
               }
             }
@@ -543,7 +541,14 @@
         },
         "responses": {
           "200": {
-            "description": "Deposit instruction prepared successfully"
+            "description": "Deposit instruction prepared successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DepositInstructionResponse"
+                }
+              }
+            }
           },
           "400": {
             "description": "Bad request",
@@ -591,7 +596,14 @@
         },
         "responses": {
           "200": {
-            "description": "Deposit transaction prepared successfully"
+            "description": "Deposit transaction prepared successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionResponse"
+                }
+              }
+            }
           },
           "400": {
             "description": "Bad request",
@@ -1821,6 +1833,62 @@
         ]
       }
     },
+    "/strategy-info/{strategy_id}": {
+      "get": {
+        "tags": [
+          "Strategies"
+        ],
+        "operationId": "get_strategy_info",
+        "parameters": [
+          {
+            "name": "strategy_id",
+            "in": "path",
+            "description": "Strategy identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Strategy information retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StrategyInfo"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Strategy not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
     "/user-balances/{user_id}": {
       "get": {
         "tags": [
@@ -1893,7 +1961,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PaginatedResponse"
+                  "$ref": "#/components/schemas/PaginatedResponseUserBalance"
                 }
               }
             }
@@ -1939,6 +2007,15 @@
             "name": "user_id",
             "in": "path",
             "description": "Fund user identifier (wallet address)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "strategy_id",
+            "in": "query",
+            "description": "Filter by specific strategy ID",
             "required": true,
             "schema": {
               "type": "string"
@@ -2206,7 +2283,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PaginatedResponse"
+                  "$ref": "#/components/schemas/PaginatedResponseUserYield"
                 }
               }
             }
@@ -2257,7 +2334,14 @@
         },
         "responses": {
           "200": {
-            "description": "Withdraw instruction prepared successfully"
+            "description": "Withdraw instruction prepared successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WithdrawInstructionResponse"
+                }
+              }
+            }
           },
           "400": {
             "description": "Bad request",
@@ -2305,7 +2389,14 @@
         },
         "responses": {
           "200": {
-            "description": "Withdraw transaction prepared successfully"
+            "description": "Withdraw transaction prepared successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionResponse"
+                }
+              }
+            }
           },
           "400": {
             "description": "Bad request",
@@ -4251,6 +4342,26 @@
           }
         }
       },
+      "DepositInstructionResponse": {
+        "type": "object",
+        "required": [
+          "deposit_instructions",
+          "lookup_table"
+        ],
+        "properties": {
+          "deposit_instructions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SolanaInstruction"
+            },
+            "description": "Array of Solana instructions for the deposit operation"
+          },
+          "lookup_table": {
+            "type": "string",
+            "description": "Address of the lookup table for the transaction"
+          }
+        }
+      },
       "ErrorResponse": {
         "type": "object",
         "required": [
@@ -4511,6 +4622,46 @@
           }
         }
       },
+      "PaginatedResponseUserBalance": {
+        "type": "object",
+        "description": "Paginated response wrapper",
+        "required": [
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserBalance"
+            }
+          },
+          "meta": {
+            "$ref": "#/components/schemas/PaginationMeta",
+            "description": "Pagination metadata"
+          }
+        }
+      },
+      "PaginatedResponseUserYield": {
+        "type": "object",
+        "description": "Paginated response wrapper",
+        "required": [
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserYield"
+            }
+          },
+          "meta": {
+            "$ref": "#/components/schemas/PaginationMeta",
+            "description": "Pagination metadata"
+          }
+        }
+      },
       "PaginationInfo": {
         "type": "object",
         "required": [
@@ -4720,8 +4871,122 @@
           }
         }
       },
+      "SolanaAccountMeta": {
+        "type": "object",
+        "required": [
+          "pubkey",
+          "is_signer",
+          "is_writable"
+        ],
+        "properties": {
+          "pubkey": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "uint8",
+              "minimum": 0,
+              "maximum": 255
+            },
+            "minItems": 32,
+            "maxItems": 32,
+            "description": "32-byte public key as an array of integers"
+          },
+          "is_signer": {
+            "type": "boolean",
+            "description": "Whether the account is a signer"
+          },
+          "is_writable": {
+            "type": "boolean",
+            "description": "Whether the account is writable"
+          }
+        }
+      },
+      "SolanaInstruction": {
+        "type": "object",
+        "required": [
+          "program_id",
+          "accounts",
+          "data"
+        ],
+        "properties": {
+          "program_id": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "uint8",
+              "minimum": 0,
+              "maximum": 255
+            },
+            "minItems": 32,
+            "maxItems": 32,
+            "description": "32-byte program ID as an array of integers"
+          },
+          "accounts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SolanaAccountMeta"
+            },
+            "description": "Array of account metadata for the instruction"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "uint8",
+              "minimum": 0,
+              "maximum": 255
+            },
+            "description": "Instruction data as an array of bytes"
+          }
+        }
+      },
       "String": {
         "type": "string"
+      },
+      "StrategyInfo": {
+        "type": "object",
+        "required": [
+          "strategy_id",
+          "strategy_name",
+          "assets",
+          "apy",
+          "apy_per_asset"
+        ],
+        "properties": {
+          "strategy_id": {
+            "type": "string",
+            "description": "Unique identifier for the strategy"
+          },
+          "strategy_name": {
+            "type": "string",
+            "description": "Name of the strategy"
+          },
+          "assets": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of asset addresses included in the strategy"
+          },
+          "apy": {
+            "type": "number",
+            "format": "double",
+            "description": "Overall annual percentage yield for the strategy"
+          },
+          "apy_per_asset": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "number",
+              "format": "double"
+            },
+            "description": "APY breakdown per asset address",
+            "example": {
+              "27G8MtK7VtTcCHkpASjSDdkWWYfoqT6ggEuKidVJidD4": 0.046395890734657115,
+              "J1toso1uCk3RLmjorhTtrVwY9HJ7X8V9yYac6Y7kGCPn": 0.05022988427340677,
+              "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v": 5.660193556175348
+            }
+          }
+        }
       },
       "StructuredInputForCreatingUserFund": {
         "type": "object",
@@ -4753,6 +5018,18 @@
         "properties": {
           "params": {
             "$ref": "#/components/schemas/InputForWithdraw"
+          }
+        }
+      },
+      "TransactionResponse": {
+        "type": "object",
+        "required": [
+          "encoded_transaction"
+        ],
+        "properties": {
+          "encoded_transaction": {
+            "type": "string",
+            "description": "Base64 encoded Solana transaction"
           }
         }
       },
@@ -4801,11 +5078,12 @@
           "yield_balance": {
             "oneOf": [
               {
-                "type": "null"
+                "$ref": "#/components/schemas/YieldBalance"
               },
               {
-                "$ref": "#/components/schemas/YieldBalance"
+                "type": "null"
               }
+              
             ]
           }
         }
@@ -4928,6 +5206,26 @@
           },
           "funds": {
             "type": "string"
+          }
+        }
+      },
+      "WithdrawInstructionResponse": {
+        "type": "object",
+        "required": [
+          "withdraw_instructions",
+          "lookup_table"
+        ],
+        "properties": {
+          "withdraw_instructions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SolanaInstruction"
+            },
+            "description": "Array of Solana instructions for the withdraw operation"
+          },
+          "lookup_table": {
+            "type": "string",
+            "description": "Address of the lookup table for the transaction"
           }
         }
       },

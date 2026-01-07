@@ -90,11 +90,12 @@
             ]
           },
           {
-            "group": "Endpoint Examples",
+            "group": "Endpoints",
             "pages": [
               "breeze-api/endpoints/get-user-balances",
               "breeze-api/endpoints/get-breeze-balances",
               "breeze-api/endpoints/get-user-yield",
+              "breeze-api/endpoints/get-strategy-info",
               "breeze-api/endpoints/get-deposit-instructions",
               "breeze-api/endpoints/get-deposit-transaction",
               "breeze-api/endpoints/get-withdraw-instruction",
