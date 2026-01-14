@@ -529,6 +529,8 @@
           "Deposits"
         ],
         "operationId": "process_for_deposit_with_instruction",
+        "summary": "Generate deposit instructions",
+        "description": "Generates raw Solana instructions for depositing funds into a strategy. Use this endpoint for advanced use cases where you need more control over transaction construction.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -584,6 +586,8 @@
           "Deposits"
         ],
         "operationId": "process_for_deposit_with_transaction",
+        "summary": "Generate deposit transaction",
+        "description": "Generates a complete, versioned, serialized unsigned Solana transaction for depositing funds into a strategy. The returned base64-encoded transaction can be deserialized, signed by the user's wallet, and submitted to the Solana network.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1839,6 +1843,8 @@
           "Strategies"
         ],
         "operationId": "get_strategy_info",
+        "summary": "Get strategy information",
+        "description": "Retrieves detailed information about a strategy, including the strategy name, list of supported assets, overall APY, and per-asset APY breakdown.",
         "parameters": [
           {
             "name": "strategy_id",
@@ -1895,6 +1901,8 @@
           "User Data"
         ],
         "operationId": "get_user_balances",
+        "summary": "Get user balances",
+        "description": "Retrieves balance information for a user with optional filtering by asset. Returns position values and deposit amounts with pagination support.",
         "parameters": [
           {
             "name": "user_id",
@@ -2235,6 +2243,8 @@
           "User Data"
         ],
         "operationId": "get_user_yield",
+        "summary": "Get user yield",
+        "description": "Retrieves the total yield earned by a user across all their positions. Supports optional currency conversion and filtering by balance or base asset.",
         "parameters": [
           {
             "name": "user_id",
@@ -2322,6 +2332,8 @@
           "Withdrawals"
         ],
         "operationId": "process_for_withdraw_with_instruction",
+        "summary": "Generate withdraw instructions",
+        "description": "Generates raw Solana instructions for withdrawing funds from a strategy. Use this endpoint for advanced use cases where you need more control over transaction construction.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2377,6 +2389,8 @@
           "Withdrawals"
         ],
         "operationId": "process_for_withdraw_with_transaction",
+        "summary": "Generate withdraw transaction",
+        "description": "Generates a complete, versioned, serialized unsigned Solana transaction for withdrawing funds from a strategy. The returned base64-encoded transaction can be deserialized, signed by the user's wallet, and submitted to the Solana network.",
         "requestBody": {
           "content": {
             "application/json": {
