@@ -85,6 +85,7 @@
           {
             "group": "Endpoints",
             "pages": [
+              "breeze-api/endpoints/get-health",
               "breeze-api/endpoints/get-user-balances",
               "breeze-api/endpoints/get-breeze-balances",
               "breeze-api/endpoints/get-user-yield",
