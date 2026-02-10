@@ -302,7 +302,7 @@ Close a user account and return a serialized transaction. You can identify the a
 
 ```typescript
 const closeTx = await sdk.createCloseUserAccountTransaction({
-  userPubkey: 'your-user-pubkey', // Required
+  userPubkey: 'your-user-pubkey', // Required 
   strategyId: 'your-strategy-id', // Required with userPubkey
   mint: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', // Required with userPubkey
   payer: 'payer-pubkey', // Optional
