@@ -1,0 +1,12 @@
+{
+  "name": "breeze-docs",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "format": "prettier --write \"**/*.mdx\"",
+    "format:check": "prettier --check \"**/*.mdx\""
+  },
+  "devDependencies": {
+    "prettier": "^3.4.2"
+  }
+}

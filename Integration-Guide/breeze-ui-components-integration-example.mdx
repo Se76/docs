@@ -22,7 +22,11 @@ Breeze allows users to earn yield on their Solana assets (USDC, USDT, SOL, and m
 - A Breeze Strategy ID
 - A Solana RPC endpoint (recommended: use a paid RPC provider for production)
 
-<Card title="Example Code Repository" icon="github" href="https://github.com/anagrambuild/breeze-integration-examples/tree/master/breeze-powered-website">
+<Card
+  title="Example Code Repository"
+  icon="github"
+  href="https://github.com/anagrambuild/breeze-integration-examples/tree/master/breeze-powered-website"
+>
   View the complete example code for this integration on GitHub.
 </Card>
 
@@ -78,28 +82,29 @@ export interface AssetConfig {
 // and hardcode them here for your strategy
 export const AVAILABLE_ASSETS: AssetConfig[] = [
   {
-    symbol: "USDC",
-    mint: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+    symbol: 'USDC',
+    mint: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
     decimals: 6,
   },
   {
-    symbol: "USDT",
-    mint: "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB",
+    symbol: 'USDT',
+    mint: 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB',
     decimals: 6,
   },
   {
-    symbol: "SOL",
-    mint: "So11111111111111111111111111111111111111112",
+    symbol: 'SOL',
+    mint: 'So11111111111111111111111111111111111111112',
     decimals: 9,
   },
   // Add more tokens as supported by your strategy
 ];
 
 // For lookups by symbol
-export const SUPPORTED_TOKENS: Record<string, AssetConfig> =
-  Object.fromEntries(AVAILABLE_ASSETS.map((asset) => [asset.symbol, asset]));
+export const SUPPORTED_TOKENS: Record<string, AssetConfig> = Object.fromEntries(
+  AVAILABLE_ASSETS.map((asset) => [asset.symbol, asset])
+);
 
-export type TokenSymbol = "USDC" | "USDT" | "SOL";
+export type TokenSymbol = 'USDC' | 'USDT' | 'SOL';
 ```
 
 ---
@@ -112,12 +117,18 @@ Create helpers for decimal conversion:
 // app/utils/decimals.ts
 
 // Convert user-facing amount to API amount (multiply by 10^decimals)
-export const toApiAmount = (userAmount: number, decimals: number = 6): number => {
+export const toApiAmount = (
+  userAmount: number,
+  decimals: number = 6
+): number => {
   return Math.floor(userAmount * Math.pow(10, decimals));
 };
 
 // Convert API amount to user-facing amount (divide by 10^decimals)
-export const fromApiAmount = (apiAmount: number, decimals: number = 6): number => {
+export const fromApiAmount = (
+  apiAmount: number,
+  decimals: number = 6
+): number => {
   return apiAmount / Math.pow(10, decimals);
 };
 ```
@@ -133,17 +144,17 @@ Create server-side API routes that proxy requests to the Breeze API. This keeps 
 ```typescript
 // app/api/balance/route.ts
 
-import { NextRequest } from "next/server";
-import { fromApiAmount } from "../../utils/decimals";
+import { NextRequest } from 'next/server';
+import { fromApiAmount } from '../../utils/decimals';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
-  const user_pubkey = searchParams.get("user_pubkey");
+  const user_pubkey = searchParams.get('user_pubkey');
 
   if (!user_pubkey) {
-    return new Response("user_pubkey is required", { status: 400 });
+    return new Response('user_pubkey is required', { status: 400 });
   }
 
   const apiKey = process.env.BREEZE_API_KEY;
@@ -151,18 +162,18 @@ export async function GET(request: NextRequest) {
   const strategyId = process.env.NEXT_PUBLIC_BREEZE_STRATEGY_ID;
 
   if (!apiKey || !baseUrl || !strategyId) {
-    return new Response("Server configuration error", { status: 500 });
+    return new Response('Server configuration error', { status: 500 });
   }
 
   try {
     const url = new URL(`${baseUrl}/breeze-balances/${user_pubkey}`);
-    url.searchParams.append("strategy_id", strategyId);
+    url.searchParams.append('strategy_id', strategyId);
 
     const response = await fetch(url.toString(), {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
-        "x-api-key": apiKey,
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
       },
       cache: 'no-store',
     });
@@ -183,8 +194,14 @@ export async function GET(request: NextRequest) {
           const decimals = item.decimals || 6;
           return {
             ...item,
-            total_position_value: fromApiAmount(item.total_position_value, decimals),
-            total_deposited_value: fromApiAmount(item.total_deposited_value, decimals),
+            total_position_value: fromApiAmount(
+              item.total_position_value,
+              decimals
+            ),
+            total_deposited_value: fromApiAmount(
+              item.total_deposited_value,
+              decimals
+            ),
             yield_earned: fromApiAmount(item.yield_earned, decimals),
           };
         }),
@@ -194,7 +211,7 @@ export async function GET(request: NextRequest) {
 
     return Response.json(data);
   } catch (error) {
-    return new Response("Internal server error", { status: 500 });
+    return new Response('Internal server error', { status: 500 });
   }
 }
 ```
@@ -204,31 +221,35 @@ export async function GET(request: NextRequest) {
 ```typescript
 // app/api/deposittx/route.ts
 
-import { NextRequest } from "next/server";
-import { toApiAmount } from "../../utils/decimals";
-import { AVAILABLE_ASSETS } from "../../config/tokens";
+import { NextRequest } from 'next/server';
+import { toApiAmount } from '../../utils/decimals';
+import { AVAILABLE_ASSETS } from '../../config/tokens';
 
 export async function POST(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
-  const amount = searchParams.get("amount");
-  const user_pubkey = searchParams.get("user_pubkey");
-  const base_asset = searchParams.get("base_asset");
-  const all = searchParams.get("all") === "true";
+  const amount = searchParams.get('amount');
+  const user_pubkey = searchParams.get('user_pubkey');
+  const base_asset = searchParams.get('base_asset');
+  const all = searchParams.get('all') === 'true';
 
   if (!user_pubkey || !base_asset) {
-    return new Response("Missing required parameters", { status: 400 });
+    return new Response('Missing required parameters', { status: 400 });
   }
 
-  const tokenConfig = AVAILABLE_ASSETS.find((asset) => asset.mint === base_asset);
+  const tokenConfig = AVAILABLE_ASSETS.find(
+    (asset) => asset.mint === base_asset
+  );
   const decimals = tokenConfig?.decimals || 6;
   const apiAmount = toApiAmount(Number(amount || 0), decimals);
 
   const apiKey = process.env.BREEZE_API_KEY;
-  const strategyId = searchParams.get("strategy_id") || process.env.NEXT_PUBLIC_BREEZE_STRATEGY_ID;
+  const strategyId =
+    searchParams.get('strategy_id') ||
+    process.env.NEXT_PUBLIC_BREEZE_STRATEGY_ID;
   const baseUrl = process.env.BREEZE_API_BASE_URL;
 
   if (!apiKey || !strategyId || !baseUrl) {
-    return new Response("Server configuration error", { status: 500 });
+    return new Response('Server configuration error', { status: 500 });
   }
 
   const requestBody = {
@@ -243,10 +264,10 @@ export async function POST(request: NextRequest) {
   };
 
   const response = await fetch(`${baseUrl}/deposit/tx`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
-      "x-api-key": apiKey,
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
     },
     body: JSON.stringify(requestBody),
   });
@@ -267,31 +288,35 @@ export async function POST(request: NextRequest) {
 ```typescript
 // app/api/withdrawtx/route.ts
 
-import { NextRequest } from "next/server";
-import { toApiAmount } from "../../utils/decimals";
-import { AVAILABLE_ASSETS } from "../../config/tokens";
+import { NextRequest } from 'next/server';
+import { toApiAmount } from '../../utils/decimals';
+import { AVAILABLE_ASSETS } from '../../config/tokens';
 
 export async function POST(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
-  const amount = searchParams.get("amount");
-  const user_pubkey = searchParams.get("user_pubkey");
-  const base_asset = searchParams.get("base_asset");
-  const all = searchParams.get("all") === "true";
+  const amount = searchParams.get('amount');
+  const user_pubkey = searchParams.get('user_pubkey');
+  const base_asset = searchParams.get('base_asset');
+  const all = searchParams.get('all') === 'true';
 
   if (!user_pubkey || !base_asset) {
-    return new Response("Missing required parameters", { status: 400 });
+    return new Response('Missing required parameters', { status: 400 });
   }
 
-  const tokenConfig = AVAILABLE_ASSETS.find((asset) => asset.mint === base_asset);
+  const tokenConfig = AVAILABLE_ASSETS.find(
+    (asset) => asset.mint === base_asset
+  );
   const decimals = tokenConfig?.decimals || 6;
   const apiAmount = toApiAmount(Number(amount || 0), decimals);
 
   const apiKey = process.env.BREEZE_API_KEY;
-  const strategyId = searchParams.get("strategy_id") || process.env.NEXT_PUBLIC_BREEZE_STRATEGY_ID;
+  const strategyId =
+    searchParams.get('strategy_id') ||
+    process.env.NEXT_PUBLIC_BREEZE_STRATEGY_ID;
   const baseUrl = process.env.BREEZE_API_BASE_URL;
 
   if (!apiKey || !strategyId || !baseUrl) {
-    return new Response("Server configuration error", { status: 500 });
+    return new Response('Server configuration error', { status: 500 });
   }
 
   const requestBody = {
@@ -306,10 +331,10 @@ export async function POST(request: NextRequest) {
   };
 
   const response = await fetch(`${baseUrl}/withdraw/tx`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
-      "x-api-key": apiKey,
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
     },
     body: JSON.stringify(requestBody),
   });
@@ -338,15 +363,15 @@ export async function GET() {
   const strategyId = process.env.NEXT_PUBLIC_BREEZE_STRATEGY_ID;
 
   if (!apiKey || !baseUrl || !strategyId) {
-    return new Response("Server configuration error", { status: 500 });
+    return new Response('Server configuration error', { status: 500 });
   }
 
   try {
     const response = await fetch(`${baseUrl}/strategy-info/${strategyId}`, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
-        "x-api-key": apiKey,
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
       },
       cache: 'no-store',
     });
@@ -360,7 +385,7 @@ export async function GET() {
     const data = await response.json();
     return Response.json(data);
   } catch (error) {
-    return new Response("Internal server error", { status: 500 });
+    return new Response('Internal server error', { status: 500 });
   }
 }
 ```
@@ -453,16 +478,21 @@ export default function RootLayout({
 ```typescript
 // app/hooks/useBreezeBalances.ts
 
-"use client";
+'use client';
 
-import { useState, useCallback } from "react";
-import { useWallet } from "@solana/wallet-adapter-react";
-import { Connection, PublicKey } from "@solana/web3.js";
-import { getAccount, getAssociatedTokenAddress, TokenAccountNotFoundError } from "@solana/spl-token";
-import { SUPPORTED_TOKENS, TokenSymbol } from "../config/tokens";
+import { useState, useCallback } from 'react';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { Connection, PublicKey } from '@solana/web3.js';
+import {
+  getAccount,
+  getAssociatedTokenAddress,
+  TokenAccountNotFoundError,
+} from '@solana/spl-token';
+import { SUPPORTED_TOKENS, TokenSymbol } from '../config/tokens';
 
-const rpcUrl = process.env.NEXT_PUBLIC_RPC_URL || "https://api.mainnet-beta.solana.com";
-const connection = new Connection(rpcUrl, "confirmed");
+const rpcUrl =
+  process.env.NEXT_PUBLIC_RPC_URL || 'https://api.mainnet-beta.solana.com';
+const connection = new Connection(rpcUrl, 'confirmed');
 
 export function useBreezeBalances(selectedToken: TokenSymbol) {
   const { publicKey, connected } = useWallet();
@@ -478,7 +508,7 @@ export function useBreezeBalances(selectedToken: TokenSymbol) {
       const tokenConfig = SUPPORTED_TOKENS[selectedToken];
 
       // Handle native SOL differently
-      if (selectedToken === "SOL") {
+      if (selectedToken === 'SOL') {
         const lamports = await connection.getBalance(publicKey);
         const balance = lamports / Math.pow(10, tokenConfig.decimals);
         setWalletBalance(balance);
@@ -489,13 +519,14 @@ export function useBreezeBalances(selectedToken: TokenSymbol) {
       const tokenMint = new PublicKey(tokenConfig.mint);
       const ata = await getAssociatedTokenAddress(tokenMint, publicKey);
       const accountInfo = await getAccount(connection, ata);
-      const balance = Number(accountInfo.amount) / Math.pow(10, tokenConfig.decimals);
+      const balance =
+        Number(accountInfo.amount) / Math.pow(10, tokenConfig.decimals);
 
       setWalletBalance(balance);
       return balance;
     } catch (error) {
       if (!(error instanceof TokenAccountNotFoundError)) {
-        console.error("Error fetching wallet balance:", error);
+        console.error('Error fetching wallet balance:', error);
       }
       setWalletBalance(0);
       return 0;
@@ -506,8 +537,10 @@ export function useBreezeBalances(selectedToken: TokenSymbol) {
     if (!connected || !publicKey) return 0;
 
     try {
-      const response = await fetch(`/api/balance?user_pubkey=${publicKey.toBase58()}`);
-      if (!response.ok) throw new Error("Failed to fetch balance");
+      const response = await fetch(
+        `/api/balance?user_pubkey=${publicKey.toBase58()}`
+      );
+      if (!response.ok) throw new Error('Failed to fetch balance');
 
       const data = await response.json();
 
@@ -523,7 +556,7 @@ export function useBreezeBalances(selectedToken: TokenSymbol) {
       setBreezeBalance(0);
       return 0;
     } catch (error) {
-      console.error("Error fetching Breeze balance:", error);
+      console.error('Error fetching Breeze balance:', error);
       setBreezeBalance(0);
       return 0;
     }
@@ -554,16 +587,17 @@ export function useBreezeBalances(selectedToken: TokenSymbol) {
 ```typescript
 // app/hooks/useBreezeTransactions.tsx
 
-"use client";
+'use client';
 
-import { useState, useCallback } from "react";
-import { useWallet } from "@solana/wallet-adapter-react";
-import { Connection, VersionedTransaction } from "@solana/web3.js";
-import { SUPPORTED_TOKENS, TokenSymbol } from "../config/tokens";
-import { toast } from "sonner";
+import { useState, useCallback } from 'react';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { Connection, VersionedTransaction } from '@solana/web3.js';
+import { SUPPORTED_TOKENS, TokenSymbol } from '../config/tokens';
+import { toast } from 'sonner';
 
-const rpcUrl = process.env.NEXT_PUBLIC_RPC_URL || "https://api.mainnet-beta.solana.com";
-const connection = new Connection(rpcUrl, "confirmed");
+const rpcUrl =
+  process.env.NEXT_PUBLIC_RPC_URL || 'https://api.mainnet-beta.solana.com';
+const connection = new Connection(rpcUrl, 'confirmed');
 
 interface TransactionOptions {
   selectedToken: TokenSymbol;
@@ -582,44 +616,57 @@ export function useBreezeTransactions() {
   const [error, setError] = useState<string | null>(null);
 
   const executeTransaction = useCallback(
-    async (endpoint: string, operationType: "deposit" | "withdraw", onSuccess: () => Promise<void>) => {
+    async (
+      endpoint: string,
+      operationType: 'deposit' | 'withdraw',
+      onSuccess: () => Promise<void>
+    ) => {
       setLoading(true);
       setError(null);
 
       const toastId = toast.loading(`Processing ${operationType}...`);
 
       try {
-        const response = await fetch(endpoint, { method: "POST" });
-        if (!response.ok) throw new Error(`Failed to fetch ${operationType} transaction`);
+        const response = await fetch(endpoint, { method: 'POST' });
+        if (!response.ok)
+          throw new Error(`Failed to fetch ${operationType} transaction`);
 
         const data = await response.json();
-        const txString = typeof data.data === "string" ? data.data : data;
+        const txString = typeof data.data === 'string' ? data.data : data;
 
-        const txBytes = Buffer.from(txString, "base64");
+        const txBytes = Buffer.from(txString, 'base64');
         const versionedTx = VersionedTransaction.deserialize(txBytes);
 
-        if (!signTransaction) throw new Error("Wallet does not support signing");
+        if (!signTransaction)
+          throw new Error('Wallet does not support signing');
 
         const signedTx = await signTransaction(versionedTx);
         const txSignature = await connection.sendTransaction(signedTx, {
           skipPreflight: true,
-          preflightCommitment: "confirmed",
+          preflightCommitment: 'confirmed',
         });
 
         setLoading(false);
         setConfirming(true);
-        toast.loading("Confirming transaction...", { id: toastId });
+        toast.loading('Confirming transaction...', { id: toastId });
 
-        const confirmation = await connection.confirmTransaction(txSignature, "confirmed");
+        const confirmation = await connection.confirmTransaction(
+          txSignature,
+          'confirmed'
+        );
 
         if (confirmation.value.err) {
-          throw new Error("Transaction failed to confirm");
+          throw new Error('Transaction failed to confirm');
         }
 
-        toast.success(`${operationType === "deposit" ? "Deposit" : "Withdrawal"} successful!`, { id: toastId });
+        toast.success(
+          `${operationType === 'deposit' ? 'Deposit' : 'Withdrawal'} successful!`,
+          { id: toastId }
+        );
         await onSuccess();
       } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : `${operationType} failed`;
+        const errorMessage =
+          err instanceof Error ? err.message : `${operationType} failed`;
         setError(errorMessage);
         toast.error(errorMessage, { id: toastId });
       } finally {
@@ -635,7 +682,7 @@ export function useBreezeTransactions() {
       const { selectedToken, amount, onSuccess, all = false } = options;
       const mint = SUPPORTED_TOKENS[selectedToken].mint;
       const endpoint = `/api/deposittx?user_pubkey=${publicKey!.toBase58()}&amount=${amount}&base_asset=${mint}&all=${all}`;
-      await executeTransaction(endpoint, "deposit", onSuccess);
+      await executeTransaction(endpoint, 'deposit', onSuccess);
     },
     [publicKey, executeTransaction]
   );
@@ -645,7 +692,7 @@ export function useBreezeTransactions() {
       const { selectedToken, amount, onSuccess, all = false } = options;
       const mint = SUPPORTED_TOKENS[selectedToken].mint;
       const endpoint = `/api/withdrawtx?user_pubkey=${publicKey!.toBase58()}&amount=${amount}&base_asset=${mint}&all=${all}`;
-      await executeTransaction(endpoint, "withdraw", onSuccess);
+      await executeTransaction(endpoint, 'withdraw', onSuccess);
     },
     [publicKey, executeTransaction]
   );
@@ -769,16 +816,17 @@ export default function DepositComponent() {
 
 ### Breeze API Endpoints
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/breeze-balances/{user_pubkey}` | GET | Get user's Breeze balances |
-| `/deposit/tx` | POST | Generate deposit transaction |
-| `/withdraw/tx` | POST | Generate withdraw transaction |
-| `/strategy-info/{strategy_id}` | GET | Get strategy details and supported assets |
+| Endpoint                         | Method | Description                               |
+| -------------------------------- | ------ | ----------------------------------------- |
+| `/breeze-balances/{user_pubkey}` | GET    | Get user's Breeze balances                |
+| `/deposit/tx`                    | POST   | Generate deposit transaction              |
+| `/withdraw/tx`                   | POST   | Generate withdraw transaction             |
+| `/strategy-info/{strategy_id}`   | GET    | Get strategy details and supported assets |
 
 ### Request Headers
 
 All requests require:
+
 ```
 Content-Type: application/json
 x-api-key: YOUR_API_KEY

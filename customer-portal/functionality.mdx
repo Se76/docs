@@ -5,24 +5,15 @@ description: 'Comprehensive overview of Breeze Customer Portal features and capa
 
 The Breeze Customer Portal provides a comprehensive web-based interface for managing your strategies, monitoring performance, and configuring your integration settings.
 
-## Organization Overview
+## Overview
 
 The Organization Overview is your central dashboard providing a quick snapshot of your entire organization's performance.
 
-<img src="/customer-portal/new-images/organization-overview-up.png" alt="Organization Overview" />
+<img src="/customer-portal/images/overview/overview-one.png" alt="Overview" />
 
 <CardGroup cols={3}>
   <Card title="Total Deposits" icon="wallet">
     Cumulative deposits across all your strategies.
-  </Card>
-  <Card title="Total Strategies" icon="layer-group">
-    Number of active strategies in your organization.
-  </Card>
-  <Card title="Total Users" icon="users">
-    Unique users depositing into your strategies.
-  </Card>
-  <Card title="User Earnings" icon="dollar-sign">
-    Total yield earned by your users.
   </Card>
   <Card title="Fees Earned" icon="coins">
     Total fees you've earned from user yields.
@@ -30,11 +21,23 @@ The Organization Overview is your central dashboard providing a quick snapshot o
   <Card title="Current APY" icon="percent">
     Weighted average APY across all strategies.
   </Card>
+  <Card title="Total Users" icon="users">
+    Unique users depositing into your strategies.
+  </Card>
+  <Card title="User Earnings" icon="dollar-sign">
+    Total yield earned by your users.
+  </Card>
+  <Card title="Total Strategies" icon="layer-group">
+    Number of active strategies in your organization.
+  </Card>
 </CardGroup>
 
 ### Performance Charts
 
-<img src="/customer-portal/new-images/overview-down.png" alt="Performance Charts" />
+<img
+  src="/customer-portal/images/overview/overview-two.png"
+  alt="Performance Charts"
+/>
 
 The dashboard includes interactive charts for **TVL**, **Fees Earned**, **APY** (with time range selector), and **Asset Allocation** across supported tokens.
 
@@ -44,70 +47,36 @@ The dashboard includes interactive charts for **TVL**, **Fees Earned**, **APY** 
 
 The Strategies section allows you to manage and monitor all your yield optimization strategies.
 
-<img src="/customer-portal/new-images/strategies.png" alt="Strategies List" />
+<Tip>Click on the Strategies card to view your strategies.</Tip>
 
-The strategies table displays: Strategy Name, Status, Assets, APY, Total Users, Fee Rate, Created date, and Actions.
+<img
+  src="/customer-portal/images/overview/strategies-step-one.png"
+  alt="Strategy Overview"
+/>
 
-<Tip>
-Click on any strategy row to view detailed metrics and configuration options.
-</Tip>
+<Tip>Click on a strategy to view more details and locate the strategy ID</Tip>
 
-### Strategy Details - Overview Tab
+<img
+  src="/customer-portal/images/overview/strategies-step-two.png"
+  alt="Strategy Overview"
+/>
 
-<img src="/customer-portal/new-images/strategy-up.png" alt="Strategy Overview" />
+<Info>Each strategy has it's own high level overview</Info>
 
-Each strategy has its own detailed view with three tabs: **Overview**, **Allocations**, and **Fee Info**.
-
-The Overview tab shows key metrics: **TVL**, **Fees Earned**, **Current APY**, and **Total Users**, along with charts for **Asset Breakdown** and **Strategy APY** over time.
-
-<img src="/customer-portal/new-images/strategies-down.png" alt="Strategy Charts" />
-
-### Strategy Details - Allocations Tab
-
-<img src="/customer-portal/new-images/strategy-allocations-up.png" alt="Strategy Allocations" />
-
-The Allocations tab provides transparency into how funds are deployed:
-
-<CardGroup cols={3}>
-  <Card title="Allocated Amount" icon="check">
-    Amount currently deployed to yield-generating protocols.
-  </Card>
-  <Card title="Unallocated Amount" icon="clock">
-    Amount waiting to be allocated to yield sources.
-  </Card>
-  <Card title="Allocation Ratio" icon="chart-pie">
-    Percentage of funds actively earning yield.
-  </Card>
-</CardGroup>
-
-**Protocol Allocation** shows fund distribution across DeFi protocols: Drift, Kamino, Marginfi, and JupLend.
-
-<img src="/customer-portal/new-images/strategy-allocations-down.png" alt="Active Yield Allocations" />
-
-**Active Yield Allocations** breaks down positions by asset with expandable details showing protocol, value, APY, and allocation percentage.
-
-### Strategy Details - Fee Info Tab
-
-<img src="/customer-portal/new-images/strategy-fee.png" alt="Fee Info" />
-
-The Fee Info tab displays your **Performance Fee** percentage, **Fee Recipient** wallet address, and **Distribution Frequency**.
-
-<Note>
-Remember: Fees are only taken from the yield your users earn, never from their deposits.
-</Note>
-
----
+<img
+  src="/customer-portal/images/overview/strategies-step-three.png"
+  alt="Strategy Overview"
+/>
 
 ## API Keys
 
-The API Keys section lets you manage authentication credentials for integrating with the Breeze API.
+The API Keys section lets you manage authentication keys for integrating with the Breeze API.
 
-<img src="/customer-portal/new-images/api-keys-screen.png" alt="API Keys" />
-
-Create, search, and manage your API keys with quick links to **API Docs** and **Authentication Guide**. The table shows key name, status, masked key (with copy), creation/expiration dates, last used, and actions (view, edit, delete).
+<img src="/customer-portal/images/api-keys/api-keys-page.png" alt="API Keys" />
 
 <Warning>
-Keep your API keys secure. Never expose them in client-side code or public repositories.
+  Keep your API keys secure. Never expose them in client-side code or public
+  repositories.
 </Warning>
 
 ---
@@ -116,7 +85,10 @@ Keep your API keys secure. Never expose them in client-side code or public repos
 
 The Organization section allows you to manage your organization's settings and team members.
 
-<img src="/customer-portal/new-images/organization-members.png" alt="Organization Settings" />
+<img
+  src="/customer-portal/images/organization/organization-page.png"
+  alt="Organization Settings"
+/>
 
 ### Organization Settings
 
@@ -132,10 +104,12 @@ Add and manage team members with **Admin** or **Member** roles. The table shows 
 
 <CardGroup cols={2}>
   <Card title="Real-time Visibility" icon="eye">
-    Live dashboards provide immediate insights into deposits, yields, and user activity.
+    Live dashboards provide immediate insights into deposits, yields, and user
+    activity.
   </Card>
   <Card title="Protocol Transparency" icon="magnifying-glass">
-    See exactly where funds are allocated across DeFi protocols like Drift, Kamino, Marginfi, and JupLend.
+    See exactly where funds are allocated across DeFi protocols like Drift,
+    Kamino, Marginfi, and JupLend.
   </Card>
   <Card title="Fee Management" icon="sliders">
     Configure and track your performance fees with detailed earnings breakdowns.
