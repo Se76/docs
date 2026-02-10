@@ -57,6 +57,15 @@ x-api-key: YOUR_API_KEY
       Generate raw Solana instructions for withdrawing (advanced use cases).
     </ResponseField>
   </Accordion>
+
+  <Accordion title="Close User Account" icon="xmark">
+    <ResponseField name="POST /close-user-account/tx" type="POST">
+      Generate a complete serialized transaction for closing a user's fund account.
+    </ResponseField>
+    <ResponseField name="POST /close-user-account/ix" type="POST">
+      Generate raw Solana instructions for closing a user's fund account (advanced use cases).
+    </ResponseField>
+  </Accordion>
 </AccordionGroup>
 
 ---

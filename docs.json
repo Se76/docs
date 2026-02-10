@@ -93,7 +93,9 @@
               "breeze-api/endpoints/get-deposit-instructions",
               "breeze-api/endpoints/get-deposit-transaction",
               "breeze-api/endpoints/get-withdraw-instruction",
-              "breeze-api/endpoints/get-withdraw-transaction"
+              "breeze-api/endpoints/get-withdraw-transaction",
+              "breeze-api/endpoints/get-close-user-account-transaction",
+              "breeze-api/endpoints/get-close-user-account-instructions"
             ]
           }
         ]

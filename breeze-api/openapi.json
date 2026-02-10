@@ -2576,6 +2576,120 @@
         ]
       }
     },
+    "/close-user-account/tx": {
+      "post": {
+        "tags": [
+          "Close User Account"
+        ],
+        "operationId": "process_close_user_account_transaction",
+        "summary": "Generate close user account transaction",
+        "description": "Generates a complete, versioned, serialized unsigned Solana transaction for closing a user's fund account. The returned base64-encoded transaction can be deserialized, signed by the user's wallet, and submitted to the Solana network. Identify the account either by user_account (fund ID) or by user_pubkey + strategy_id + mint.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StructuredInputForCloseUserFund"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Close user account transaction prepared successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/close-user-account/ix": {
+      "post": {
+        "tags": [
+          "Close User Account"
+        ],
+        "operationId": "process_close_user_account_instruction",
+        "summary": "Generate close user account instructions",
+        "description": "Generates raw Solana instructions for closing a user's fund account. Use this endpoint for advanced use cases where you need more control over transaction construction. Identify the account either by user_account (fund ID) or by user_pubkey + strategy_id + mint.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StructuredInputForCloseUserFund"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Close user account instructions prepared successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CloseUserFundInstructions"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
     "/health": {
       "get": {
         "tags": [
@@ -4572,7 +4686,8 @@
             "type": [
               "boolean",
               "null"
-            ]
+            ],
+            "description": "Whether to withdraw all funds"
           },
           "amount": {
             "type": [
@@ -4580,13 +4695,15 @@
               "null"
             ],
             "format": "int64",
-            "minimum": 0
+            "minimum": 0,
+            "description": "Amount to withdraw in raw token units"
           },
           "base_asset": {
             "type": [
               "string",
               "null"
-            ]
+            ],
+            "description": "Token mint address (e.g., USDC, WSOL)"
           },
           "fund_id": {
             "type": [
@@ -4598,25 +4715,57 @@
             "type": [
               "string",
               "null"
-            ]
+            ],
+            "description": "Optional payer public key for the transaction"
           },
           "strategy_id": {
             "type": [
               "string",
               "null"
-            ]
+            ],
+            "description": "Strategy identifier"
           },
           "user_key": {
             "type": [
               "string",
               "null"
-            ]
+            ],
+            "description": "User's wallet public key"
           },
           "user_token_account": {
             "type": [
               "string",
               "null"
-            ]
+            ],
+            "description": "Optional user token account address (defaults to user's ATA)"
+          },
+          "create_wsol_ata": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "If base asset is WSOL and user_token_account is not provided, prepend an ATA-create instruction. Defaults to true when omitted."
+          },
+          "unwrap_wsol_ata": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "If base asset is WSOL, unwrap to SOL by syncing and closing the user's WSOL ATA at the end. Defaults to false when omitted."
+          },
+          "detect_wsol_ata": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "If true, the API will do an RPC round-trip to detect whether the user's WSOL ATA exists. When enabled (and base asset is WSOL), this overrides the other WSOL ATA flags: if the WSOL ATA does not exist, create_wsol_ata=true and unwrap_wsol_ata=true; if the WSOL ATA exists, create_wsol_ata=false and unwrap_wsol_ata=false. Defaults to false when omitted."
+          },
+          "exclude_fees": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "When true, excludes fees from the amount. So that you will be able get the real amount you have requested + fees that would have been subtracted from the user's yield. Defaults to false."
           }
         }
       },
@@ -5072,6 +5221,65 @@
           }
         }
       },
+      "InputForCloseUserFund": {
+        "type": "object",
+        "properties": {
+          "user_account": {
+            "type": ["string", "null"],
+            "description": "User fund account ID. Provide this OR user_pubkey + strategy_id + mint."
+          },
+          "user_pubkey": {
+            "type": ["string", "null"],
+            "description": "User's public key. Used together with strategy_id and mint to identify the account."
+          },
+          "strategy_id": {
+            "type": ["string", "null"],
+            "description": "Strategy identifier. Required when using user_pubkey."
+          },
+          "mint": {
+            "type": ["string", "null"],
+            "description": "Token mint address. Required when using user_pubkey."
+          },
+          "payer": {
+            "type": ["string", "null"],
+            "description": "Optional payer for the transaction (defaults to user)"
+          },
+          "funds_recipient": {
+            "type": ["string", "null"],
+            "description": "Optional paymaster to receive rent refunds (defaults to user)"
+          },
+          "user_token_account": {
+            "type": ["string", "null"],
+            "description": "Optional user token account to close (defaults to user's ATA)"
+          }
+        }
+      },
+      "StructuredInputForCloseUserFund": {
+        "type": "object",
+        "required": [
+          "params"
+        ],
+        "properties": {
+          "params": {
+            "$ref": "#/components/schemas/InputForCloseUserFund"
+          }
+        }
+      },
+      "CloseUserFundInstructions": {
+        "type": "object",
+        "required": [
+          "close_user_fund_instructions"
+        ],
+        "properties": {
+          "close_user_fund_instructions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SolanaInstruction"
+            },
+            "description": "Array of Solana instructions for closing the user fund account"
+          }
+        }
+      },
       "StructuredInputForWithdraw": {
         "type": "object",
         "required": [
@@ -5391,6 +5599,10 @@
     {
       "name": "Yield Sources",
       "description": "Yield source information and statistics"
+    },
+    {
+      "name": "Close User Account",
+      "description": "Close user fund account operations"
     },
     {
       "name": "External APIs",
