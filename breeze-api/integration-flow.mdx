@@ -3,12 +3,20 @@ title: 'Integration Flow'
 description: 'Step-by-step guide for integrating Breeze API into your application'
 ---
 
-<Info>This represents one possible implementation approach. Your implementation may vary based on specific requirements.</Info>
+<Info>
+  This represents one possible implementation approach. Your implementation may
+  vary based on specific requirements.
+</Info>
 
 ## Prerequisites
 
-<Card title="Create Strategy & Get API Key" href="/customer-portal/create-strategy" icon="rocket">
-  Before starting, create a strategy in the Customer Portal and get your API key.
+<Card
+  title="Create Strategy & Get API Key"
+  href="/customer-portal/create-strategy"
+  icon="rocket"
+>
+  Before starting, create a strategy in the Customer Portal and get your API
+  key.
 </Card>
 
 ---
@@ -43,6 +51,7 @@ description: 'Step-by-step guide for integrating Breeze API into your applicatio
     ```
 
     <Tip>Cache this response - the supported assets rarely change.</Tip>
+
   </Step>
 
   <Step title="Fetch APY Data (Periodically)">
@@ -67,6 +76,7 @@ description: 'Step-by-step guide for integrating Breeze API into your applicatio
       }
     }
     ```
+
   </Step>
 
   <Step title="Fetch User Balances">
@@ -82,6 +92,7 @@ description: 'Step-by-step guide for integrating Breeze API into your applicatio
     - Show earned yield per asset
 
     <Note>Call this endpoint whenever you need to refresh balance data (after transactions, on page load, etc.)</Note>
+
   </Step>
 
   <Step title="Deposit Funds">
@@ -109,6 +120,7 @@ description: 'Step-by-step guide for integrating Breeze API into your applicatio
     3. User signs with their wallet
     4. Submit to Solana network
     5. Refresh balances after confirmation
+
   </Step>
 
   <Step title="Withdraw Funds">
@@ -131,6 +143,7 @@ description: 'Step-by-step guide for integrating Breeze API into your applicatio
     ```
 
     <Tip>Set `"all": true` in params to withdraw the entire balance for an asset.</Tip>
+
   </Step>
 </Steps>
 
@@ -142,7 +155,11 @@ description: 'Step-by-step guide for integrating Breeze API into your applicatio
   <Card title="API Quickstart" icon="bolt" href="/breeze-api/breeze-api">
     See detailed API documentation with examples.
   </Card>
-  <Card title="UI Components Example" icon="window" href="/Integration-Guide/breeze-ui-components-integration-example">
+  <Card
+    title="UI Components Example"
+    icon="window"
+    href="/integration-guide/breeze-ui-components-integration-example"
+  >
     Full code example with React components.
   </Card>
 </CardGroup>

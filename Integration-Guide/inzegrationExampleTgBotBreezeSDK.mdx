@@ -9,12 +9,11 @@ This guide demonstrates how to build a fully functional Telegram bot for DeFi yi
 
 # Functionality
 
-
 <video
   controls
   className="w-full aspect-video rounded-lg shadow-lg center"
-  src="/Integration-Guide/videos/tg-bot-using-breeze-api.mp4"
-  poster="/Integration-Guide/videos/banner-api.jpeg"
+  src="/integration-guide/videos/tg-bot-using-breeze-api.mp4"
+  poster="/integration-guide/videos/banner-api.jpeg"
 >
   Your browser does not support the video tag.
 </video>
@@ -22,20 +21,42 @@ This guide demonstrates how to build a fully functional Telegram bot for DeFi yi
 # Test it yourself
 
 If the bot will be running on our hardware, then you will be able to test it yourself.
-You can find it under **@breeze_integration_bot** handle or under [this link](https://t.me/breeze_integration_bot). 
+You can find it under **@breeze_integration_bot** handle or under [this link](https://t.me/breeze_integration_bot).
 
 # Code Location
 
 <Card
-      title="GitHub Repo"
-      icon={<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#bc07c9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bot-icon lucide-bot"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>}
-      href="https://github.com/anagrambuild/breeze-integration-examples/tree/master/telegram-bot-using-breeze-sdk"
+  title="GitHub Repo"
+  icon={
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#bc07c9"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="lucide lucide-bot-icon lucide-bot"
     >
-    Find out the github repository with the full code  
+      <path d="M12 8V4H8" />
+      <rect width="16" height="12" x="4" y="8" rx="2" />
+      <path d="M2 14h2" />
+      <path d="M20 14h2" />
+      <path d="M15 13v2" />
+      <path d="M9 13v2" />
+    </svg>
+  }
+  href="https://github.com/anagrambuild/breeze-integration-examples/tree/master/telegram-bot-using-breeze-sdk"
+>
+  Find out the github repository with the full code
 </Card>
 
 <Info>
-The Breeze SDK (`@breezebaby/breeze-sdk`) abstracts away complex API interactions, providing a clean interface for deposit/withdraw operations and real-time portfolio management.
+  The Breeze SDK (`@breezebaby/breeze-sdk`) abstracts away complex API
+  interactions, providing a clean interface for deposit/withdraw operations and
+  real-time portfolio management.
 </Info>
 
 # Breeze SDK Telegram Bot - Complete Implementation Guide
@@ -43,6 +64,7 @@ The Breeze SDK (`@breezebaby/breeze-sdk`) abstracts away complex API interaction
 ## Overview
 
 The Breeze SDK Telegram Bot enables users to:
+
 - **Manage Wallets**: Generate new keypairs or import existing ones
 - **Real-time Portfolio Tracking**: View current balances and yield positions with live APY data
 - **Multi-Asset Support**: Deposit and withdraw 8 different assets (USDC, USDT, USDS, JupSOL, JLP, mSOL, JitoSOL, SOL)
@@ -105,20 +127,52 @@ The bot supports 8 assets with their respective mints and decimals:
 
 ```typescript
 interface AssetConfig {
-    symbol: string;
-    mint: string;
-    decimals: number;
+  symbol: string;
+  mint: string;
+  decimals: number;
 }
 
 const AVAILABLE_ASSETS: AssetConfig[] = [
-    { symbol: 'USDC', mint: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', decimals: 6 },
-    { symbol: 'USDT', mint: 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB', decimals: 6 },
-    { symbol: 'USDS', mint: 'USDSwr9ApdHk5bvJKMjzff41FfuX8bSxdKcR81vTwcA', decimals: 6 },
-    { symbol: 'JupSOL', mint: 'jupSoLaHXQiZZTSfEWMTRRgpnyFm8f6sZdosWBjx93v', decimals: 9 },
-    { symbol: 'JLP', mint: '27G8MtK7VtTcCHkpASjSDdkWWYfoqT6ggEuKidVJidD4', decimals: 6 },
-    { symbol: 'mSOL', mint: 'mSoLzYCxHdYgdzU16g5QSh3i5K3z3KZK7ytfqcJm7So', decimals: 9 },
-    { symbol: 'JitoSOL', mint: 'J1toso1uCk3RLmjorhTtrVwY9HJ7X8V9yYac6Y7kGCPn', decimals: 9 },
-    { symbol: 'SOL', mint: 'So11111111111111111111111111111111111111112', decimals: 9 },
+  {
+    symbol: 'USDC',
+    mint: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
+    decimals: 6,
+  },
+  {
+    symbol: 'USDT',
+    mint: 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB',
+    decimals: 6,
+  },
+  {
+    symbol: 'USDS',
+    mint: 'USDSwr9ApdHk5bvJKMjzff41FfuX8bSxdKcR81vTwcA',
+    decimals: 6,
+  },
+  {
+    symbol: 'JupSOL',
+    mint: 'jupSoLaHXQiZZTSfEWMTRRgpnyFm8f6sZdosWBjx93v',
+    decimals: 9,
+  },
+  {
+    symbol: 'JLP',
+    mint: '27G8MtK7VtTcCHkpASjSDdkWWYfoqT6ggEuKidVJidD4',
+    decimals: 6,
+  },
+  {
+    symbol: 'mSOL',
+    mint: 'mSoLzYCxHdYgdzU16g5QSh3i5K3z3KZK7ytfqcJm7So',
+    decimals: 9,
+  },
+  {
+    symbol: 'JitoSOL',
+    mint: 'J1toso1uCk3RLmjorhTtrVwY9HJ7X8V9yYac6Y7kGCPn',
+    decimals: 9,
+  },
+  {
+    symbol: 'SOL',
+    mint: 'So11111111111111111111111111111111111111112',
+    decimals: 9,
+  },
 ];
 ```
 
@@ -126,7 +180,8 @@ const AVAILABLE_ASSETS: AssetConfig[] = [
 
 ```typescript
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || process.env.BOT_TOKEN!;
-const SOLANA_RPC_URL = process.env.SOLANA_RPC_URL || 'https://api.mainnet-beta.solana.com';
+const SOLANA_RPC_URL =
+  process.env.SOLANA_RPC_URL || 'https://api.mainnet-beta.solana.com';
 const BREEZE_API_KEY = process.env.BREEZE_API_KEY!;
 const STRATEGY_ID = process.env.STRATEGY_ID!;
 const BREEZE_API_BASE_URL = 'https://api.breeze.baby';
@@ -136,11 +191,11 @@ const BREEZE_API_BASE_URL = 'https://api.breeze.baby';
 
 ```typescript
 interface StrategyInfo {
-    strategy_id: string;
-    strategy_name: string;
-    assets: string[];
-    apy: number;
-    apy_per_asset: Record<string, number>;  // mint -> APY mapping
+  strategy_id: string;
+  strategy_name: string;
+  assets: string[];
+  apy: number;
+  apy_per_asset: Record<string, number>; // mint -> APY mapping
 }
 ```
 
@@ -150,28 +205,28 @@ interface StrategyInfo {
 import { BreezeSDK } from '@breezebaby/breeze-sdk';
 
 class BreezeBot {
-    private bot: TelegramBot;
-    private connection: Connection;
-    private breezeSDK: BreezeSDK;
-    private users: Map<number, UserData> = new Map();
-    private strategyInfo: StrategyInfo | null = null;
-    private strategyInfoLastFetch: number = 0;
-    private readonly STRATEGY_INFO_CACHE_TTL = 60000; // 1 minute cache
+  private bot: TelegramBot;
+  private connection: Connection;
+  private breezeSDK: BreezeSDK;
+  private users: Map<number, UserData> = new Map();
+  private strategyInfo: StrategyInfo | null = null;
+  private strategyInfoLastFetch: number = 0;
+  private readonly STRATEGY_INFO_CACHE_TTL = 60000; // 1 minute cache
 
-    constructor() {
-        this.bot = new TelegramBot(BOT_TOKEN, { polling: true });
-        this.connection = new Connection(SOLANA_RPC_URL);
+  constructor() {
+    this.bot = new TelegramBot(BOT_TOKEN, { polling: true });
+    this.connection = new Connection(SOLANA_RPC_URL);
 
-        // Initialize Breeze SDK for balance/yield queries
-        this.breezeSDK = new BreezeSDK({
-            baseUrl: 'https://api.breeze.baby/',
-            apiKey: BREEZE_API_KEY
-        });
+    // Initialize Breeze SDK for balance/yield queries
+    this.breezeSDK = new BreezeSDK({
+      baseUrl: 'https://api.breeze.baby/',
+      apiKey: BREEZE_API_KEY,
+    });
 
-        this.setupHandlers();
-        // Fetch strategy info on startup
-        this.fetchStrategyInfo();
-    }
+    this.setupHandlers();
+    // Fetch strategy info on startup
+    this.fetchStrategyInfo();
+  }
 }
 ```
 
@@ -179,16 +234,16 @@ class BreezeBot {
 
 ```typescript
 interface UserData {
-    keypair?: Keypair;
-    publicKey?: string;
-    currentMenu?: string;
-    selectedAsset?: AssetConfig;  // Currently selected asset for deposit/withdraw
-    pendingTransaction?: {
-        serializedTx: string;
-        type: 'deposit' | 'withdraw';
-        amount?: number;
-        asset?: string;
-    };
+  keypair?: Keypair;
+  publicKey?: string;
+  currentMenu?: string;
+  selectedAsset?: AssetConfig; // Currently selected asset for deposit/withdraw
+  pendingTransaction?: {
+    serializedTx: string;
+    type: 'deposit' | 'withdraw';
+    amount?: number;
+    asset?: string;
+  };
 }
 ```
 
@@ -589,21 +644,25 @@ private async confirmTransaction(chatId: number) {
 ## Key Features
 
 ### Multi-Asset Support
+
 - **8 Supported Assets**: USDC, USDT, USDS, JupSOL, JLP, mSOL, JitoSOL, SOL
 - **Dynamic Asset Lists**: Available assets fetched from strategy info
 - **Per-Asset APY Display**: Real-time APY shown for each asset
 
 ### Strategy-Based Integration
+
 - **Strategy ID**: Single strategy manages all assets
 - **Mint-Based Routing**: Transactions use strategy_id + base_asset (mint)
 - **APY Per Asset**: Strategy info provides `apy_per_asset` mapping
 
 ### Wallet Management
+
 - **Keypair Generation**: Create new Solana keypairs securely
 - **Private Key Import**: Import existing wallets using base58 encoded private keys
 - **Balance Tracking**: Real-time SOL and SPL token balance monitoring
 
 ### Advanced Yield Farming
+
 - **Seamless Deposits**: Deposit any supported asset into yield strategies
 - **Flexible Withdrawals**: Withdraw with percentage options (50%, 100%) or custom amounts
 - **Real-time Portfolio**: Live tracking of deposited amounts and yield earnings
@@ -616,7 +675,7 @@ private async confirmTransaction(chatId: number) {
 TELEGRAM_BOT_TOKEN=your_telegram_bot_token
 SOLANA_RPC_URL=https://api.mainnet-beta.solana.com
 BREEZE_API_KEY=your_breeze_api_key
-STRATEGY_ID=your_strategy_id 
+STRATEGY_ID=your_strategy_id
 ```
 
 ## Build and Run
@@ -640,6 +699,7 @@ npm run dev
 All interactions with the Breeze API are done through the SDK:
 
 ### Strategy Info
+
 ```typescript
 // Get strategy metadata including APY per asset
 const strategyInfo = await breezeSDK.getStrategyInfo(STRATEGY_ID);
@@ -647,73 +707,78 @@ const strategyInfo = await breezeSDK.getStrategyInfo(STRATEGY_ID);
 ```
 
 ### Balance Queries
+
 ```typescript
 // Get user balances for a specific strategy
 const balances = await breezeSDK.getBreezeBalances({
-    userId: userPublicKey,
-    strategyId: STRATEGY_ID,
-    sortBy: 'balance',
-    sortOrder: 'desc'
+  userId: userPublicKey,
+  strategyId: STRATEGY_ID,
+  sortBy: 'balance',
+  sortOrder: 'desc',
 });
 // Returns: { data: BreezeBalance[], meta: { page, per_page, total, ... } }
 ```
 
 ### Transactions
+
 ```typescript
 // Create deposit transaction
 const depositTx = await breezeSDK.createDepositTransaction({
-    strategyId: STRATEGY_ID,
-    baseAsset: mintAddress,
-    amount: tokenAmount,
-    all: false,
-    userKey: userPublicKey,
-    payerKey: userPublicKey
+  strategyId: STRATEGY_ID,
+  baseAsset: mintAddress,
+  amount: tokenAmount,
+  all: false,
+  userKey: userPublicKey,
+  payerKey: userPublicKey,
 });
 
 // Create withdraw transaction
 const withdrawTx = await breezeSDK.createWithdrawTransaction({
-    strategyId: STRATEGY_ID,
-    baseAsset: mintAddress,
-    amount: tokenAmount,
-    all: false,
-    userKey: userPublicKey,
-    payerKey: userPublicKey
+  strategyId: STRATEGY_ID,
+  baseAsset: mintAddress,
+  amount: tokenAmount,
+  all: false,
+  userKey: userPublicKey,
+  payerKey: userPublicKey,
 });
 ```
 
 ### Type Definitions
+
 ```typescript
 interface BreezeBalance {
-    strategy_name: string;
-    strategy_id: string;
-    fund_id: string;
-    token_symbol: string;
-    decimals: number;
-    total_position_value: number;
-    total_deposited_value: number;
-    yield_earned: number;
-    apy: number;
-    last_updated: string;
+  strategy_name: string;
+  strategy_id: string;
+  fund_id: string;
+  token_symbol: string;
+  decimals: number;
+  total_position_value: number;
+  total_deposited_value: number;
+  yield_earned: number;
+  apy: number;
+  last_updated: string;
 }
 
 interface StrategyInfo {
-    strategy_id: string;
-    strategy_name: string;
-    assets: string[];
-    apy: number;
-    apy_per_asset: Record<string, number>;
+  strategy_id: string;
+  strategy_name: string;
+  assets: string[];
+  apy: number;
+  apy_per_asset: Record<string, number>;
 }
 ```
 
 ## Best Practices
 
 ### Security Considerations
+
 1. **Private Key Handling**: Never log or expose private keys in plain text
 2. **Environment Variables**: Use secure environment variable management
 3. **Input Validation**: Validate all user inputs before processing
 4. **Rate Limiting**: Implement rate limiting to prevent abuse
 
 ### Performance Optimization
+
 1. **Strategy Info Caching**: 1-minute TTL cache for strategy info
 2. **Connection Pooling**: Reuse Solana RPC connections
 3. **Async Operations**: Use async/await for all I/O operations
@@ -722,18 +787,21 @@ interface StrategyInfo {
 ## Troubleshooting
 
 ### API Connection Issues
+
 - Verify API key is correct and active
 - Check network connectivity to Breeze API
 - Ensure proper environment variable configuration
 - Verify STRATEGY_ID is valid
 
 ### Transaction Failures
+
 - Check user has sufficient SOL for transaction fees
 - Verify token account exists and has sufficient balance
 - Ensure transaction isn't expired or malformed
 - Check Solana network status
 
 ### Balance Discrepancies
+
 - Strategy info provides real-time APY data
 - Check for pending transactions
 - Verify decimal conversion accuracy

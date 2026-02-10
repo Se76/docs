@@ -1,0 +1,8 @@
+node_modules
+breeze-api/openapi.json
+*.png
+*.jpeg
+*.jpg
+*.gif
+*.svg
+*.mp4

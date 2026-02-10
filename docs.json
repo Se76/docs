@@ -48,15 +48,15 @@
           {
             "group": "Integration Guide",
             "pages": [
-              "Integration-Guide/Integration-Guide"
+              "integration-guide/Integration-Guide"
             ]
           },
           {
             "group": "Integration Examples",
             "pages": [
-              "Integration-Guide/integrationExampleTgBot",
-              "Integration-Guide/inzegrationExampleTgBotBreezeSDK",
-              "Integration-Guide/breeze-ui-components-integration-example"
+              "integration-guide/integrationExampleTgBot",
+              "integration-guide/inzegrationExampleTgBotBreezeSDK",
+              "integration-guide/breeze-ui-components-integration-example"
             ]
           }
         ]

@@ -7,80 +7,194 @@ A strategy defines which assets your users can deposit and the fee structure for
 
 ## Getting to the Strategy Creation
 
-There are two ways to start creating a strategy:
+There are two ways to start creating a strategy. Pick the flow that matches your current state:
+<Tabs>
+  <Tab title="I don't have any strategies yet">
+    <Steps>
+      <Step title="Click on the 'Get Started' button">
+        From your main dashboard, click on the 'Get Started' button.
 
-## Creating Your Strategy
+        <img src="/customer-portal/images/strategy-creation/first-strategy/get-started-banner.png" alt="Get Started Button" />
+      </Step>
+      <Step title="Enter a name for your first strategy">
+        <Note>
+          This can be any name you want.
+        </Note>
 
-<Steps>
-<Step title="Find the Strategies Tab">
-    From your main dashboard, navigate to the **Strategies** tab in the sidebar.
+        <img src="/customer-portal/images/strategy-creation/first-strategy/onboarding-strategy-enter-name.png" alt="Enter Name" />
+      </Step>
+      <Step title="Select the assets you want to support">
+        Select the assets you want to support.
 
-    <img src="/customer-portal/images/new-organisation-overview.jpeg" alt="Organization Overview" />
+        <Note>
+          The assets you select here determine which tokens your users will be able to deposit into your strategy to earn yield.
+          For example, if you select USDC and SOL, your users can deposit USDC or SOL and earn yield on their deposits.
+        </Note>
 
-    <br />
+        <img src="/customer-portal/images/strategy-creation/first-strategy/onboarding-strategy-select-assets.png" alt="Select Assets" />
+      </Step>
+      <Step title="Click the 'Continue' button">
+        This will take you to the fee setup step.
 
-    <img src="/customer-portal/images/sidebar.jpeg" alt="Sidebar Navigation" style={{ width: '250px', height: 'auto' }} />
-  </Step>
-  <Step title="Start the Strategy Creation">
-    If you don't have any strategies yet, you'll see an empty strategies page. Click the button to start creating your first strategy.
+        <img src="/customer-portal/images/strategy-creation/first-strategy/onboarding-step-one-continue.png" alt="Continue Step One" />
+      </Step>
+      <Step title="Set up the fee distribution wallet">
+        Enter the Solana wallet address where you want to receive the fees from your strategy.
 
-    <img src="/customer-portal/images/strategies-tab-without-strategy.jpeg" alt="Strategies Tab" />
+        <img src="/customer-portal/images/strategy-creation/first-strategy/onboarding-fee-distribution-wallet.png" alt="Fee Distribution Wallet" />
+      </Step>
+      <Step title="Configure the fee percentage for your strategy">
+        Configure the fee percentage for your strategy.
 
-    <br />
+        <img src="/customer-portal/images/strategy-creation/first-strategy/onboarding-fee-percentage.png" alt="Set Up Fee Distribution" />
 
-    <img src="/customer-portal/images/start-onboarding.jpeg" alt="Start Onboarding" />
-  </Step>
+        <Warning>
+          **How fees work:**
 
-  <Step title="Configure Strategy Name and Assets">
-    Enter a name for your strategy and select the assets you want to support.
+          The fee you set is taken **only from the yield earned by your users**, not from their deposits.
 
-    <img src="/customer-portal/images/select-assets-without-templ.jpeg" alt="Configure Assets" />
+          For example, if you set a 10% fee and your user earns 100 USD in yield, you will receive 10 USD as your fee. The user keeps 90 USD of their earned yield, and their original deposit remains untouched.
+        </Warning>
+      </Step>
+      <Step title="Click the 'Continue' button">
+        This will take you to setting up your API keys
 
-    <Note>
-      **What do these assets mean?**
+        <img src="/customer-portal/images/strategy-creation/first-strategy/onboarding-step-two-continue.png" />
+      </Step>
+      <Step title="Enter the API key name">
+      You can access your API keys at any time from the API Keys section of the dashboard.
+        <Note>
+          This can be any name you want.
+        </Note>
 
-      The assets you select here determine which tokens your users will be able to deposit into your strategy to earn yield. For example, if you select USDC and SOL, your users can deposit either of these tokens and earn yield on their deposits.
-    </Note>
+        <img src="/customer-portal/images/strategy-creation/first-strategy/onboarding-enter-api-key-name.png" />
+      </Step>
+      <Step title="Review your strategy congiguration">
+        <Note>
+          Review your strategy configuration and click the 'Complete Setup' button to create your strategy.
+        </Note>
 
-    <Info>
-      Can't find the asset you need? [Contact us](/contact-us/contact-us)
-    </Info>
-  </Step>
+        <img src="/customer-portal/images/strategy-creation/first-strategy/onboarding-review-configuration.png" />
 
-  <Step title="Set Up Fee Distribution">
-    Configure the fee percentage for your strategy.
+        <Tip>
+          Strategy creation may take a some time as it requires creating various on-chain accounts. Please be patient while the strategy creation is being executed.
+        </Tip>
+      </Step>
+      <Step title="Checkout our integration guide">
+        <Note>
+          Checkout our integration guide to learn how to integrate Breeze into your application.
+        </Note>
 
-    <img src="/customer-portal/images/set-up-fee-distribution.png" alt="Set Up Fee Distribution" />
+        <img src="/customer-portal/images/strategy-creation/first-strategy/onboarding-integration-guide.png" />
+      </Step>
+      <Step title="Once back in the dashboard, you should see your new strategy pending">
+        <img src="/customer-portal/images/strategy-creation/first-strategy/onboarding-pending-strategy.png" />
 
-    <Warning>
-      **How fees work:**
+        <Tip>
+          Once all on-chain accounts are created, your strategy will become "Active" and you can start using it.
+        </Tip>
+      </Step>
+    </Steps>
 
-      The fee you set is taken **only from the yield earned by your users**, not from their deposits.
+  </Tab>
+  <Tab title="I already have a strategy">
+    <Steps>
+      <Step title="Locate the Strategies Card">
+        From your main dashboard, click on the strategies card.
 
-      For example, if you set a 10% fee and your user earns 100 USD in yield, you will receive 10 USD as your fee. The user keeps 90 USD of their earned yield, and their original deposit remains untouched.
-    </Warning>
-  </Step>
+        <img src="/customer-portal/images/strategy-creation/existing-strategies/strategy-card.png" alt="Organization Overview" />
 
-  <Step title="Review and Create">
-    Review all your strategy settings to make sure everything is configured correctly, then click the **Create** button.
+      </Step>
+      <Step title="Start the Strategy Creation">
+        Once the strategies sheet is open, click on the "Create New Strategy" button.
 
-    <img src="/customer-portal/images/review-your-strategy-1.png" alt="Review Strategy" />
+        <img src="/customer-portal/images/strategy-creation/existing-strategies/create-strategy-button.png" alt="Strategies Tab" />
 
-    <Tip>
-      Strategy creation may take a some time as it requires creating various on-chain accounts. Please be patient while the strategy creation is being executed.
-    </Tip>
-  </Step>
-</Steps>
+      </Step>
+      <Step title="Enter a name for your strategy">
+        <Note>
+          This can be any name you want.
+        </Note>
+
+        <img src="/customer-portal/images/strategy-creation/existing-strategies/strategy-enter-name.png" alt="Strategies Tab" />
+
+      </Step>
+      <Step title="Select the assets you want to support">
+        <Note>
+          The assets you select here determine which tokens your users will be able to deposit into your strategy to earn yield.
+          For example, if you select USDC and SOL, your users can deposit USDC or SOL and earn yield on their deposits.
+        </Note>
+
+        <img src="/customer-portal/images/strategy-creation/existing-strategies/strategy-select-assets.png" alt="Configure Assets" />
+
+        <Info>
+          Can't find the asset you need? [Contact us](/contact-us/contact-us)
+        </Info>
+
+      </Step>
+      <Step title={`After picking a name and selecting assets, click the "Continue" button`}>
+        This will take you to the fee distribution step.
+
+        <img src="/customer-portal/images/strategy-creation/existing-strategies/strategy-continue-step-one.png" alt="Configure Assets" />
+
+      </Step>
+      <Step title="Set Up Fee Distribution">
+        Configure the fee percentage for your strategy.
+
+        <img src="/customer-portal/images/strategy-creation/existing-strategies/strategy-enter-fee-percentage.png" alt="Set Up Fee Distribution" />
+
+        <Warning>
+          **How fees work:**
+
+          The fee you set is taken **only from the yield earned by your users**, not from their deposits.
+
+          For example, if you set a 10% fee and your user earns 100 USD in yield, you will receive 10 USD as your fee. The user keeps 90 USD of their earned yield, and their original deposit remains untouched.
+        </Warning>
+
+      </Step>
+      <Step title="After entering the fee percentage, click the 'Create Strategy' button">
+        This will trigger the strategy creation process.
+
+        <img src="/customer-portal/images/strategy-creation/existing-strategies/strategy-submit-step.png" alt="Set Up Fee Distribution" />
+
+        <Tip>
+          Strategy creation may take a some time as it requires creating various on-chain accounts. Please be patient while the strategy creation is being executed.
+        </Tip>
+
+      </Step>
+      <Step title="Monitor the strategy creation process">
+        You should now see your strategy in the list of strategies with a "Pending" status.
+
+        <img src="/customer-portal/images/strategy-creation/existing-strategies/strategy-pending-list.png" alt="Set Up Fee Distribution" />
+        <img src="/customer-portal/images/strategy-creation/existing-strategies/strategy-pending-dash.png" alt="Set Up Fee Distribution" />
+
+        <Tip>
+          Once all on-chain accounts are created, your strategy will become "Active" and you can start using it.
+        </Tip>
+
+      </Step>
+    </Steps>
+
+  </Tab>
+</Tabs>
 
 ## What's Next?
 
 Once your strategy is created, you can:
 
 <CardGroup cols={2}>
-  <Card title="Get Your API Key" icon="key" href="/get-your-api-key/instruction">
+  <Card
+    title="Get Your API Key"
+    icon="key"
+    href="/get-your-api-key/instruction"
+  >
     Generate an API key to start integrating Breeze into your application.
   </Card>
-  <Card title="Integration Guide" icon="book" href="/Integration-Guide/Integration-Guide">
+  <Card
+    title="Integration Guide"
+    icon="book"
+    href="/integration-guide/integration-guide"
+  >
     Follow our integration guide to connect your strategy to your app.
   </Card>
 </CardGroup>
