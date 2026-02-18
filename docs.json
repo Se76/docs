@@ -34,7 +34,7 @@
           {
             "group": "Breeze Risk Engine (BRE)",
             "pages": [
-              "introduction/breeze-risk-engine",
+              "introduction/breeze-risk-engine-s-five",
               "introduction/key-risk-metrics-and-formulas",
               "introduction/dynamic-pool-rebalancing-mechanism",
               "introduction/s-five"
