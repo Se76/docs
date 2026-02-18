@@ -62,10 +62,10 @@
         ]
       },
       {
-        "tab": "Breeze MCP Server",
+        "tab": "Breeze Agent Kit",
         "groups": [
           {
-            "group": "Set up Breeze MCP Server",
+            "group": "Breeze Agent Kit",
             "pages": [
               "mcp-server/quickstart"
             ]
