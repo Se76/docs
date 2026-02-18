@@ -1,18 +1,294 @@
 ---
-title: 'Breeze MCP Server'
-description: 'Get started with Breeze MCP Server in 5 Minutes'
+title: 'Breeze Agent Kit'
+description: 'Solana yield strategies for AI agents — deposit, withdraw, and check balances through MCP, x402, and more.'
 ---
 
-# Introduction
+# Breeze Agent Kit
 
-The Model Context Protocol (MCP) is an open standard that links your functions to LLMs and AI applications. With Mintlify’s integration, you can effortlessly generate an MCP server for Breeze’s documentation, enabling seamless, AI-powered interactions with your product.
+The Breeze Agent Kit is a comprehensive toolkit that gives AI agents the ability to interact with Solana yield strategies. Deposit, withdraw, check balances, and earn yield — all through a simple interface your agent already understands.
 
-# Install Breeze MCP Server
+<CardGroup cols={2}>
+  <Card title="Breeze Agent Kit" icon="globe" href="https://agent.breeze.baby">
+    Explore the Breeze Agent Kit homepage — overview, supported tokens, and integration paths.
+  </Card>
+  <Card title="GitHub Repository" icon="github" href="https://github.com/anagrambuild/breeze-agent-kit">
+    Source code, examples, and documentation for the Breeze Agent Kit monorepo.
+  </Card>
+</CardGroup>
 
-Install the Breeze MCP server to enable AI-powered interactions with Breeze documentation. This allows LLMs and AI applications to seamlessly access and query Breeze docs through the Model Context Protocol.
+<CardGroup cols={2}>
+  <Card title="MCP Server" icon="robot" href="#mcp-integration">
+    Connect any MCP-compatible AI client (Claude Desktop, Cursor, etc.) to Breeze in minutes.
+  </Card>
+  <Card title="x402 Protocol" icon="credit-card" href="#x402-integration">
+    Pay-per-call API access with automatic USDC micropayments — no API key needed.
+  </Card>
+  <Card title="Skill" icon="wand-magic-sparkles" href="#skill-integration">
+    Drop a SKILL.md into your agent framework for instant Breeze capabilities — no server needed.
+  </Card>
+  <Card title="Examples" icon="flask" href="#examples">
+    Ready-to-run example agents to get you started fast.
+  </Card>
+</CardGroup>
 
-```bash
-npx mint-mcp add docs.breeze.baby
+## Supported Tokens
+
+The Breeze Agent Kit supports yield strategies for the following Solana tokens:
+
+| Token | Symbol | Decimals |
+|-------|--------|----------|
+| USD Coin | USDC | 6 |
+| Tether USD | USDT | 6 |
+| USDS | USDS | 6 |
+| Solana | SOL | 9 |
+| Jito Staked SOL | JitoSOL | 9 |
+| Marinade Staked SOL | mSOL | 9 |
+| Jupiter SOL | JupSOL | 9 |
+| Jupiter Liquidity Provider | JLP | 6 |
+
+## Available Tools
+
+Every integration path exposes the same core set of tools to your agent:
+
+<AccordionGroup>
+  <Accordion title="get_strategy_info" icon="chart-line">
+    Retrieves strategy metadata and APY breakdown per asset. Use this to show your users current yield rates before depositing.
+  </Accordion>
+  <Accordion title="check_balances" icon="wallet">
+    Views wallet positions, total deposits, and earned yield across all supported tokens.
+  </Accordion>
+  <Accordion title="get_deposit_tx" icon="arrow-down-to-bracket">
+    Generates an unsigned base64-encoded deposit transaction ready for signing.
+  </Accordion>
+  <Accordion title="get_withdraw_tx" icon="arrow-up-from-bracket">
+    Generates an unsigned base64-encoded withdrawal transaction ready for signing.
+  </Accordion>
+  <Accordion title="sign_and_send_tx" icon="paper-plane">
+    Signs a base64 transaction with the configured wallet and broadcasts it to the Solana network.
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## MCP Integration
+
+The fastest way to connect an AI agent to Breeze. Works with Claude Desktop, Cursor, Windsurf, and any MCP-compatible client.
+
+### Prerequisites
+
+<Steps>
+  <Step title="Get your API key">
+    Sign up and grab your `BREEZE_API_KEY` from [portal.breeze.baby](https://portal.breeze.baby).
+  </Step>
+  <Step title="Export your wallet key">
+    Export your Solana private key as a base58 string for `WALLET_PRIVATE_KEY`.
+  </Step>
+</Steps>
+
+### Configuration
+
+Add the following to your MCP client configuration file:
+
+<CodeGroup>
+
+```json macOS
+// ~/Library/Application Support/Claude/claude_desktop_config.json
+{
+  "mcpServers": {
+    "breeze": {
+      "command": "npx",
+      "args": ["-y", "@breezebaby/mcp-server"],
+      "env": {
+        "BREEZE_API_KEY": "your-api-key",
+        "WALLET_PRIVATE_KEY": "your-base58-private-key",
+        "SOLANA_RPC_URL": "https://api.mainnet-beta.solana.com"
+      }
+    }
+  }
+}
 ```
 
-For detailed setup instructions and configuration options, check the [full MCP integration guide](https://mintlify.com/docs/mcp).
+```json Windows
+// %APPDATA%\Claude\claude_desktop_config.json
+{
+  "mcpServers": {
+    "breeze": {
+      "command": "npx",
+      "args": ["-y", "@breezebaby/mcp-server"],
+      "env": {
+        "BREEZE_API_KEY": "your-api-key",
+        "WALLET_PRIVATE_KEY": "your-base58-private-key",
+        "SOLANA_RPC_URL": "https://api.mainnet-beta.solana.com"
+      }
+    }
+  }
+}
+```
+
+```json Linux
+// ~/.config/Claude/claude_desktop_config.json
+{
+  "mcpServers": {
+    "breeze": {
+      "command": "npx",
+      "args": ["-y", "@breezebaby/mcp-server"],
+      "env": {
+        "BREEZE_API_KEY": "your-api-key",
+        "WALLET_PRIVATE_KEY": "your-base58-private-key",
+        "SOLANA_RPC_URL": "https://api.mainnet-beta.solana.com"
+      }
+    }
+  }
+}
+```
+
+</CodeGroup>
+
+Restart your MCP client after saving the configuration. Your agent will now have access to all Breeze tools.
+
+---
+
+## x402 Integration
+
+The x402 protocol lets your agent access Breeze through a pay-per-call API. Each request is automatically paid for with a ~$0.01 USDC micropayment — **no API key required**.
+
+<Info>
+  x402 uses the [Faremeter](https://faremeter.com) payment protocol. Your agent sends a request, receives a `402 Payment Required` response, automatically pays, and retries — all handled transparently.
+</Info>
+
+All you need is a Solana wallet with a small USDC balance. The agent handles payments automatically through the `@faremeter/fetch` package.
+
+```typescript
+import { payingFetch } from "@faremeter/fetch";
+import { Keypair } from "@solana/web3.js";
+
+const keypair = Keypair.fromSecretKey(/* your key */);
+
+// Every call auto-pays with USDC — no API key needed
+const response = await payingFetch(
+  "https://x402.breeze.baby/deposit/tx",
+  keypair,
+  {
+    method: "POST",
+    body: JSON.stringify({
+      strategy_id: "your-strategy-id",
+      base_asset: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      amount: 100,
+      user_key: keypair.publicKey.toString(),
+    }),
+  }
+);
+```
+
+---
+
+## Skill Integration
+
+A **Skill** is a standalone `SKILL.md` file that teaches any compatible agent framework how to interact with Breeze — no server, no daemon, just a markdown file your agent reads and follows.
+
+The Breeze x402 Payment API skill gives your agent the ability to check balances, deposit, withdraw, and sign/send Solana transactions, all paid automatically via x402 USDC micropayments.
+
+<Info>
+  Skills work with agent frameworks that support `SKILL.md` discovery (e.g., Claude Code, custom agent runtimes). The agent reads the skill file, understands the available actions, and executes them autonomously.
+</Info>
+
+### How It Works
+
+<Steps>
+  <Step title="Add the skill to your project">
+    Copy the `SKILL.md` file into your project's skills directory:
+    ```bash
+    mkdir -p skills/breeze-x402-payment-api
+    cp path/to/SKILL.md skills/breeze-x402-payment-api/SKILL.md
+    ```
+    You can find the skill file in the [Breeze Agent Kit repo](https://github.com/anagrambuild/breeze-agent-kit/tree/main/apps/skills/breeze-x402-payment-api).
+  </Step>
+  <Step title="Set environment variables">
+    The skill requires a funded Solana wallet and a Breeze strategy ID:
+    ```bash
+    export WALLET_PRIVATE_KEY="your-base58-private-key"
+    export STRATEGY_ID="your-strategy-id"
+    # Optional:
+    export X402_API_URL="https://x402.breeze.baby"
+    export SOLANA_RPC_URL="https://api.mainnet-beta.solana.com"
+    ```
+  </Step>
+  <Step title="Ask your agent">
+    The agent auto-discovers the skill and handles the rest:
+    - *"Check my Breeze balances"*
+    - *"Deposit 10 USDC into Breeze"*
+    - *"Withdraw 5 USDC from Breeze"*
+  </Step>
+</Steps>
+
+### What the Skill Covers
+
+The `SKILL.md` contains everything the agent needs:
+
+- **API endpoint contracts** — balance, deposit, and withdraw with full request/response specs
+- **Payment setup** — x402 payment-wrapped fetch configuration using `@faremeter/fetch`
+- **Transaction signing** — versioned and legacy Solana transaction handling
+- **Workflow checklists** — step-by-step instructions for balance, deposit, and withdraw flows
+- **Error handling** — HTTP status codes, transaction failures, and security rules
+- **Supported tokens** — full mint address and decimal reference table
+
+<Tip>
+  The skill uses x402 micropayments (~$0.01 USDC per call) so **no Breeze API key is needed** — just a funded Solana wallet.
+</Tip>
+
+---
+
+## Examples
+
+The Breeze Agent Kit repo includes four ready-to-run example agents. Each example is a standalone project with its own `package.json` and README.
+
+<CardGroup cols={2}>
+  <Card title="Agent via MCP Server" icon="robot" href="https://github.com/anagrambuild/breeze-agent-kit/tree/main/apps/examples/agent-using-breeze-mcp-server">
+    A Claude-powered agent that talks to Breeze through the MCP server over stdio. Supports interactive and single-shot modes.
+  </Card>
+  <Card title="Agent via Direct SDK" icon="code" href="https://github.com/anagrambuild/breeze-agent-kit/tree/main/apps/examples/agent-using-raw-breeze-functionality">
+    A Claude-powered agent that uses the Breeze SDK directly — no MCP server needed. Simpler architecture with all blockchain logic embedded.
+  </Card>
+  <Card title="x402 Script" icon="credit-card" href="https://github.com/anagrambuild/breeze-agent-kit/tree/main/apps/examples/agent-using-x402">
+    A standalone script demonstrating deposit, withdraw, and balance checks through the x402 payment-gated API with automatic USDC micropayments.
+  </Card>
+  <Card title="Agent via x402 API" icon="bolt" href="https://github.com/anagrambuild/breeze-agent-kit/tree/main/apps/examples/agent-using-x402-payment-api">
+    A Claude tool-calling agent that interacts with Breeze over the x402 API. Each call auto-pays with USDC — no API key required.
+  </Card>
+</CardGroup>
+
+### Running an Example
+
+```bash
+# Clone the repo
+git clone https://github.com/anagrambuild/breeze-agent-kit.git
+cd breeze-agent-kit
+
+# Install dependencies
+bun install
+
+# Navigate to an example
+cd apps/examples/agent-using-breeze-mcp-server
+
+# Copy the env file and fill in your keys
+cp .env.example .env
+
+# Run the agent
+bun run start
+```
+
+---
+
+## Resources
+
+<CardGroup cols={3}>
+  <Card title="GitHub Repository" icon="github" href="https://github.com/anagrambuild/breeze-agent-kit">
+    Source code, issues, and contributions.
+  </Card>
+  <Card title="Try Breeze" icon="play" href="https://try.breeze.baby">
+    Test Breeze yield strategies in the browser.
+  </Card>
+  <Card title="Get API Key" icon="key" href="https://portal.breeze.baby">
+    Sign up for the Breeze Customer Portal.
+  </Card>
+</CardGroup>
