@@ -21,7 +21,10 @@ The Breeze Agent Kit is a comprehensive toolkit that gives AI agents the ability
     Connect any MCP-compatible AI client (Claude Desktop, Cursor, etc.) to Breeze in minutes.
   </Card>
   <Card title="x402 Protocol" icon="credit-card" href="#x402-integration">
-    Pay-per-call API access with automatic USDC micropayments — no API key needed.
+    Pay-per-call API access with automatic USDC micropayments via Faremeter — no API key needed.
+  </Card>
+  <Card title="MPP (Model Payment Protocol)" icon="coins" href="#mpp-integration">
+    Pay-per-call API access with on-chain Solana USDC payments via the MPP protocol — no API key needed.
   </Card>
   <Card title="Skill" icon="wand-magic-sparkles" href="#skill-integration">
     Drop a SKILL.md into your agent framework for instant Breeze capabilities — no server needed.
@@ -179,6 +182,100 @@ const response = await payingFetch(
   }
 );
 ```
+
+---
+
+## MPP Integration
+
+The [Model Payment Protocol (MPP)](https://github.com/solana-foundation/mpp-sdk) lets your agent access Breeze through a pay-per-call API using on-chain Solana USDC payments. Each request costs **$0.001 USDC** — **no API key required**.
+
+<Info>
+  MPP uses the HTTP 402 payment flow from the Solana Foundation's `@solana/mpp` SDK. Your agent sends a request, receives a `402 Payment Required` challenge, builds and broadcasts a USDC payment transaction on Solana, and retries with proof of payment — all handled transparently by `mppx.fetch()`.
+</Info>
+
+All you need is a Solana wallet with a small USDC balance and SOL for transaction fees.
+
+### Endpoints
+
+All Breeze API methods are available through the MPP gateway at `https://mpp.breeze.baby`:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/strategy-info/:strategy_id?` | Strategy metadata and APY |
+| GET | `/breeze-balances/:user_pubkey` | Wallet positions, deposits, yield |
+| GET | `/user-balances/:user_id` | User balance info |
+| GET | `/user-yield/:user_id` | Total yield earned |
+| POST | `/deposit/tx` | Build unsigned deposit transaction |
+| POST | `/deposit/ix` | Raw deposit instructions |
+| POST | `/withdraw/tx` | Build unsigned withdraw transaction |
+| POST | `/withdraw/ix` | Raw withdraw instructions |
+| POST | `/close-user-account/tx` | Close account transaction |
+| POST | `/close-user-account/ix` | Close account instructions |
+
+When `strategy_id` is omitted, it defaults to the Breeze all-assets strategy.
+
+### Quick Start
+
+Install the MPP client SDK:
+
+```bash
+npm install @solana/mpp @solana/kit mppx
+```
+
+Use `mppx.fetch()` to make requests — it handles the 402 → pay → retry flow automatically:
+
+```typescript
+import { Mppx, solana } from "@solana/mpp/client";
+import { createKeyPairSignerFromBytes, getBase58Codec } from "@solana/kit";
+
+// Create a signer from your wallet's base58-encoded private key
+const keyBytes = getBase58Codec().encode("your-base58-private-key");
+const signer = await createKeyPairSignerFromBytes(keyBytes);
+
+const mppx = Mppx.create({
+  methods: [
+    solana.charge({
+      signer,
+      broadcast: true, // required — client broadcasts the payment transaction
+      rpcUrl: "https://your-rpc-provider.com", // recommended
+    }),
+  ],
+});
+
+// All paid endpoints work transparently — payment is automatic
+const strategyInfo = await mppx.fetch("https://mpp.breeze.baby/strategy-info");
+const data = await strategyInfo.json();
+
+// Check balances
+const balances = await mppx.fetch(
+  `https://mpp.breeze.baby/breeze-balances/${signer.address}`
+);
+
+// Build a deposit transaction
+const deposit = await mppx.fetch("https://mpp.breeze.baby/deposit/tx", {
+  method: "POST",
+  headers: { "content-type": "application/json" },
+  body: JSON.stringify({
+    user_key: signer.address,
+    base_asset: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+    amount: 1000000, // 1 USDC in base units
+  }),
+});
+```
+
+<Warning>
+  Clients **must** use `broadcast: true` (push mode). In push mode the client broadcasts the payment transaction on-chain and sends the confirmed signature to the server for verification.
+</Warning>
+
+<Tip>
+  Use a reliable Solana RPC provider (Helius, Triton, QuickNode) — the public RPC is rate-limited and may cause payment failures.
+</Tip>
+
+### Client Requirements
+
+- A Solana wallet with **USDC** (0.001 per call) and a small amount of **SOL** for transaction fees
+- A reliable Solana RPC endpoint
+- `@solana/mpp`, `@solana/kit`, and `mppx` packages
 
 ---
 
